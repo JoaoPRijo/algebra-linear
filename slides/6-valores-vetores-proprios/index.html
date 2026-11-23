@@ -235,7 +235,7 @@
   </div>
 </section>
 
-<section>
+<section data-visibility="hidden">
   <h2 class="ft">Muitos vetores ao mesmo tempo</h2>
   <div class="cols c46">
     <div>
@@ -270,7 +270,49 @@
 </section>
 
 <section>
-  <h2 class="ft">Como determinar os valores próprios?</h2>
+  <h2 class="ft">Pergunta rápida: será vetor próprio? (2×2)</h2>
+  <p class="small">Calcula \(Av\) e decide. Carrega em <b>Nova pergunta</b> para gerar outra matriz.</p>
+  <div class="gerador-vp" data-n="2" style="margin-top:20px"></div>
+</section>
+
+<section>
+  <h2 class="ft">Pergunta rápida: será vetor próprio? (3×3)</h2>
+  <p class="small">Calcula \(Av\) e decide. Carrega em <b>Nova pergunta</b> para gerar outra matriz.</p>
+  <div class="gerador-vp" data-n="3" style="margin-top:20px"></div>
+</section>
+
+<section>
+  <h2 class="ft">Exercício de exame (2025/26)</h2>
+  <div class="bloco exercicio"><div class="bt">Exercício</div><div class="bc small">
+    <p>Seja \(T\colon\R^2\to\R^2\) a transformação linear cuja representação matricial na base canónica é \(\ A=\begin{bmatrix}0&2\\3&-1\end{bmatrix}\)</p>
+    <p>Verifique se os seguintes vetores são vetores próprios de \(T\). Em caso afirmativo, indique o valor próprio associado.</p>
+    <p class="center">\(u=(3,1),\qquad v=(1,1),\qquad w=(2,-3)\)</p>
+  </div></div>
+  <div class="cols" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="bloco exemplo fragment"><div class="bt">\(u\)</div><div class="bc small">\(Au=(2,8)\), que não é múltiplo de \(u\): <b>não</b> é vetor próprio</div></div>
+    <div class="bloco exemplo fragment"><div class="bt">\(v\)</div><div class="bc small">\(Av=(2,2)=2v\): vetor próprio associado a \(\lambda=2\)</div></div>
+    <div class="bloco exemplo fragment"><div class="bt">\(w\)</div><div class="bc small">\(Aw=(-6,9)=-3w\): vetor próprio associado a \(\lambda=-3\)</div></div>
+  </div>
+  <p class="small fragment">Pergunta seguinte do exame: determinar os valores próprios de \(T\). Como \(A\) é \(2\times2\) e já encontrámos \(\lambda=2\) e \(\lambda=-3\), não há mais nenhum!</p>
+</section>
+
+<section>
+  <h2 class="ft">Como determinar valores e vetores próprios?</h2>
+  <p>Seja \(A\) a matriz \(n\times n\) que representa \(T\). O método tem <strong>dois passos</strong>:</p>
+  <div class="bloco" style="margin-top:14px"><div class="bt">1.º passo — determinar os valores próprios</div><div class="bc small">
+    Calcular o polinómio característico \(\det(A-\lambda I)\) e resolver a equação característica
+    \[\det(A-\lambda I)=0\]
+    As soluções \(\lambda_1,\dots,\lambda_k\) são os valores próprios.
+  </div></div>
+  <div class="bloco fragment"><div class="bt">2.º passo — determinar os vetores próprios</div><div class="bc small">
+    Para <strong>cada</strong> valor próprio \(\lambda_i\), resolver o sistema homogéneo \((A-\lambda_i I)v=0\) por eliminação de Gauss:
+    \[E(\lambda_i)=\mathcal{N}(A-\lambda_i I)\]
+    Os vetores próprios associados a \(\lambda_i\) são os vetores não nulos de \(E(\lambda_i)\).
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">1.º passo — determinar os valores próprios</h2>
   <p>Seja \(\lambda\) um valor próprio e \(v\) um vetor próprio associado a \(\lambda\):</p>
   <div class="center" style="font-size:1.05em;line-height:2.1">
     <span class="fragment">\(T(v)=\lambda v\)</span>
@@ -283,13 +325,13 @@
     <ul>
       <li>\(p(\lambda)=\det(A-\lambda I)\) é o <strong>polinómio característico</strong> (de grau \(n\) se \(A\) é \(n\times n\))</li>
       <li>\(\det(A-\lambda I)=0\) é a <strong>equação característica</strong></li>
-      <li>Os valores próprios são as soluções da equação característica; os vetores próprios associados a \(\lambda\) são os vetores não nulos de \(E(\lambda)=\mathcal{N}(A-\lambda I)\)</li>
+      <li>Os <strong>valores próprios</strong> são as soluções da equação característica</li>
     </ul>
   </div></div>
 </section>
 
 <section>
-  <h2 class="ft">Exemplo — valores próprios</h2>
+  <h2 class="ft">Exemplo — 1.º passo: valores próprios</h2>
   <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc">
     <p>\(T\colon\R^2\to\R^2\), \(\ T(x,y)=(3x+y,\,-2x)\), \(\quad T(x,y)=\begin{bmatrix}3&1\\-2&0\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
     <div class="cols c64">
@@ -307,7 +349,25 @@
 </section>
 
 <section>
-  <h2 class="ft">Exemplo — espaços próprios</h2>
+  <h2 class="ft">2.º passo — determinar os vetores próprios</h2>
+  <p>Para cada valor próprio \(\lambda\) encontrado no 1.º passo:</p>
+  <ol>
+    <li class="fragment">Calcular a matriz \(A-\lambda I\) (subtrair \(\lambda\) à diagonal de \(A\))</li>
+    <li class="fragment">Resolver \((A-\lambda I)v=0\) pelo método de eliminação de Gauss</li>
+    <li class="fragment">Escrever a solução em função das variáveis livres: os vetores que aparecem formam uma <strong>base</strong> de \(E(\lambda)\)</li>
+    <li class="fragment">\(m_g(\lambda)=\dim E(\lambda)=\) número de variáveis livres</li>
+  </ol>
+  <div class="bloco obs fragment" style="margin-top:20px"><div class="bt">Observação</div><div class="bc small">
+    Se \(\lambda\) é mesmo um valor próprio, o sistema \((A-\lambda I)v=0\) é sempre <strong>possível e indeterminado</strong> (há pelo menos uma variável livre).
+    Se só obtivermos a solução \(v=0\), houve um erro no 1.º passo!
+  </div></div>
+  <div class="bloco obs fragment"><div class="bt">Verificação</div><div class="bc small">
+    No fim, confirma que \(Av=\lambda v\) para os vetores encontrados.
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo — 2.º passo: vetores próprios</h2>
   <div class="cols">
     <div class="bloco exemplo"><div class="bt">\(E(\lambda_1)=\mathcal{N}(T-1\cdot I)\)</div><div class="bc small">
       <p>\(T-1\cdot I=\begin{bmatrix}2&1\\-2&-1\end{bmatrix}\)</p>
@@ -361,12 +421,6 @@
 </section>
 
 <section>
-  <h2 class="ft">Pergunta rápida: será vetor próprio?</h2>
-  <p class="small">Calcula \(Av\) e decide. Carrega em <b>Nova pergunta</b> para gerar outra matriz.</p>
-  <div class="gerador-vp" style="margin-top:20px"></div>
-</section>
-
-<section>
   <h2 class="ft">A ideia da diagonalização</h2>
   <div class="cols">
     <div>
@@ -417,7 +471,7 @@
 </section>
 
 <section>
-  <h2 class="ft">Exemplo 3×3 — valores próprios</h2>
+  <h2 class="ft">Exemplo 3×3 — 1.º passo: valores próprios</h2>
   <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc small">
     <div class="cols">
       <div>
@@ -439,7 +493,7 @@
 </section>
 
 <section>
-  <h2 class="ft">Exemplo 3×3 — espaços próprios</h2>
+  <h2 class="ft">Exemplo 3×3 — 2.º passo: vetores próprios</h2>
   <div class="cols">
     <div class="bloco exemplo"><div class="bt">2.º passo: \(E(1)=\mathcal{N}(A-1\cdot I)\)</div><div class="bc small">
       <p>\(\left[\begin{array}{ccc|c}1&1&1&0\\2&2&2&0\\3&3&3&0\end{array}\right]\to\left[\begin{array}{ccc|c}\color{#c0182b}{1}&1&1&0\\0&0&0&0\\0&0&0&0\end{array}\right]\)</p>
@@ -488,6 +542,32 @@
         <li><b>Cisalhamento</b>: \(m_a(1)=2\) mas \(m_g(1)=1\) → não diagonalizável.</li>
         <li><b>Reflexão</b>: \(E(1)\) plano \(xy\), \(E(-1)\) eixo \(z\).</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Exercícios de exames anteriores</h2>
+  <div class="cols" style="gap:16px">
+    <div>
+      <div class="bloco exercicio"><div class="bt">Exame 2024/25</div><div class="bc small">
+        \(T(x,y)=(x+y,\,x+y)\). Calcule \(T(1,1)\) e \(T(1,-1)\), justifique que são vetores próprios e indique a matriz de \(T\) na base \(\{(1,1),(1,-1)\}\).
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(T(1,1)=2(1,1),\ T(1,-1)=0\cdot(1,-1)\ \Rightarrow\ \begin{bmatrix}2&0\\0&0\end{bmatrix}\)</span></p>
+      </div></div>
+      <div class="bloco exercicio"><div class="bt">Exame 2023/24</div><div class="bc small">
+        \(T(x,y)=(2x-y,\,y)\). Determine os valores próprios, os espaços próprios e uma base de vetores próprios.
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\lambda=2,\ E(2)=\ger\{(1,0)\};\ \ \lambda=1,\ E(1)=\ger\{(1,1)\}\)</span></p>
+      </div></div>
+    </div>
+    <div>
+      <div class="bloco exercicio"><div class="bt">Exame 2022/23</div><div class="bc small">
+        \(T(x,y,z)=(x+y,\,y+z,\,z+x)\). Verifique se \((1,1,1)\) é vetor próprio, encontre todos os valores próprios e diga se \(T\) é diagonalizável.
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\det(A-\lambda I)=(1-\lambda)^3+1=-(\lambda-2)(\lambda^2-\lambda+1)\): só \(\lambda=2\) é real, \(E(2)=\ger\{(1,1,1)\}\). Não é diagonalizável.</span></p>
+      </div></div>
+      <div class="bloco exercicio"><div class="bt">Ficha — valores e vetores próprios</div><div class="bc small">
+        \(A\) é \(6\times6\) com polinómio característico \(\lambda^2(\lambda-1)(\lambda-2)^3\). Quais os valores próprios e as possíveis dimensões dos espaços próprios?
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(m_a(0)=2,\ m_a(1)=1,\ m_a(2)=3\);&nbsp; \(\dim E(0)\in\{1,2\},\ \dim E(1)=1,\ \dim E(2)\in\{1,2,3\}\)</span></p>
+      </div></div>
     </div>
   </div>
 </section>

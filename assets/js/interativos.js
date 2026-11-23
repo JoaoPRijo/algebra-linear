@@ -36,10 +36,15 @@
     document.querySelectorAll('.gerador-vp').forEach(geradorVP);
   }
 
-  /* Gerador: dá uma matriz 2x2 com valores próprios inteiros e um vetor; os alunos decidem se é vetor próprio. */
+  /* Gerador: dá uma matriz n×n (n = 2 ou 3, atributo data-n) com valores próprios inteiros e um vetor;
+   * os alunos decidem se é vetor próprio. A = P D P^{-1}, com P inteira de determinante 1. */
   function geradorVP(el) {
+    const n = parseInt(el.dataset.n || '2', 10);
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-    const vecs = [[1, 0], [0, 1], [1, 1], [1, -1], [1, 2], [2, 1], [1, -2], [2, -1], [1, 3], [3, 1], [-1, 2]];
+    const mul = (X, Y) => X.map((r, i) => Y[0].map((_, j) => r.reduce((s, x, k) => s + x * Y[k][j], 0)));
+    const id = () => Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => +(i === j)));
+    const bmat = (M) => '\\begin{bmatrix}' + M.map(r => r.join(' & ')).join('\\\\ ') + '\\end{bmatrix}';
+    const bvec = (v) => '\\begin{bmatrix}' + v.join('\\\\ ') + '\\end{bmatrix}';
     let atual = null;
     const area = document.createElement('div'); area.className = 'center'; area.style.fontSize = '1.05em';
     const fb = document.createElement('div'); fb.className = 'quiz'; fb.innerHTML = '<div class="fb center"></div>';
@@ -47,38 +52,47 @@
     bts.innerHTML = '<button class="btn" data-r="1">Sim, é vetor próprio</button> <button class="btn" data-r="0">Não é</button> <button class="btn primario" data-n>Nova pergunta ↻</button>';
     el.append(area, bts, fb);
 
+    function matrizP() { // produto de operações elementares l_i += c l_j (det = 1); devolve P e P^{-1}
+      let P = id(), Pi = id();
+      for (let k = 0; k < (n === 2 ? 2 : 3); k++) {
+        const i = rnd(0, n - 1); let j; do { j = rnd(0, n - 1); } while (j === i);
+        const c = [1, -1, 2, -2][rnd(0, n === 2 ? 3 : 1)];
+        const E = id(); E[i][j] = c; const Ei = id(); Ei[i][j] = -c;
+        P = mul(P, E); Pi = mul(Ei, Pi);
+      }
+      return [P, Pi];
+    }
     function nova() {
-      // A = P D P^{-1} com P inteira de det ±1 -> entradas inteiras
-      let P, D, A;
+      let P, Pi, D, A;
       do {
-        const p = vecs[rnd(0, vecs.length - 1)], q = vecs[rnd(0, vecs.length - 1)];
-        const d = p[0] * q[1] - p[1] * q[0];
-        if (Math.abs(d) !== 1) continue;
-        P = [p[0], q[0], p[1], q[1]];
-        const l1 = rnd(-3, 4); let l2; do { l2 = rnd(-3, 4); } while (l2 === l1);
-        D = [l1, l2];
-        const Pi = [q[1] / d, -q[0] / d, -p[1] / d, p[0] / d];
-        // A = P diag(D) P^{-1}
-        const PD = [P[0] * D[0], P[1] * D[1], P[2] * D[0], P[3] * D[1]];
-        A = [PD[0] * Pi[0] + PD[1] * Pi[2], PD[0] * Pi[1] + PD[1] * Pi[3], PD[2] * Pi[0] + PD[3] * Pi[2], PD[2] * Pi[1] + PD[3] * Pi[3]].map(x => Math.round(x));
-      } while (!A || A.some(x => Math.abs(x) > 9));
-      // escolher vetor: metade das vezes um vetor próprio (múltiplo)
+        [P, Pi] = matrizP();
+        const ls = []; while (ls.length < n) { const l = rnd(-2, 4); if (!ls.includes(l)) ls.push(l); }
+        D = ls;
+        const Dm = id().map((r, i) => r.map(x => x * D[i]));
+        A = mul(mul(P, Dm), Pi);
+      } while (A.flat().some(x => Math.abs(x) > 9) || P.flat().some(x => Math.abs(x) > 3) || A.flat().filter(x => x === 0).length > n);
+      const Av = (v) => A.map(r => r.reduce((s, x, k) => s + x * v[k], 0));
+      const multiplo = (v, w) => { // w = λv ?
+        const i = v.findIndex(x => x !== 0); const lam = w[i] / v[i];
+        return v.every((x, k) => Math.abs(lam * x - w[k]) < 1e-9) ? lam : null;
+      };
       let v, prop, lam;
-      if (Math.random() < 0.5) { const i = rnd(0, 1), k = [1, -1, 2][rnd(0, 2)]; v = [P[i] * k, P[2 + i] * k]; prop = true; lam = D[i]; }
-      else {
-        do { v = vecs[rnd(0, vecs.length - 1)].slice(); if (Math.random() < .3) v = v.map(x => -x); } while (Math.abs(v[0] * (A[2] * v[0] + A[3] * v[1]) - v[1] * (A[0] * v[0] + A[1] * v[1])) === 0);
+      if (Math.random() < 0.5) {
+        const i = rnd(0, n - 1), k = [1, -1, 2][rnd(0, 2)];
+        v = P.map(r => r[i] * k); prop = true; lam = D[i];
+      } else {
+        do { v = Array.from({ length: n }, () => rnd(-2, 3)); } while (v.every(x => x === 0) || multiplo(v, Av(v)) !== null);
         prop = false;
       }
-      atual = { A, v, prop, lam };
-      area.innerHTML = `\\(A=\\begin{bmatrix}${A[0]} & ${A[1]}\\\\ ${A[2]} & ${A[3]}\\end{bmatrix}, \\qquad v=\\begin{bmatrix}${v[0]}\\\\ ${v[1]}\\end{bmatrix}\\)`;
+      atual = { A, v, prop, lam, Av: Av(v) };
+      area.innerHTML = `\\(A=${bmat(A)}, \\qquad v=${bvec(v)}\\)`;
       fb.querySelector('.fb').innerHTML = '';
       tex(area);
     }
     function responder(r) {
-      const { A, v, prop, lam } = atual;
-      const Av = [A[0] * v[0] + A[1] * v[1], A[2] * v[0] + A[3] * v[1]];
+      const { v, prop, lam, Av } = atual;
       const ok = (r === 1) === prop;
-      const exp = `\\(Av=\\begin{bmatrix}${Av[0]}\\\\ ${Av[1]}\\end{bmatrix}\\)` + (prop ? ` \\(= ${lam}\\,v\\)` + `, logo é vetor próprio associado a \\(\\lambda=${lam}\\).` : ', que não é múltiplo de \\(v\\).');
+      const exp = `\\(Av=${bvec(Av)}\\)` + (prop ? ` \\(= ${lam}\\,v\\)` + `, logo é vetor próprio associado a \\(\\lambda=${lam}\\).` : ', que não é múltiplo de \\(v\\).');
       const f = fb.querySelector('.fb');
       f.innerHTML = (ok ? '<b class="green">Certo!</b> ' : '<b class="red">Errado.</b> ') + exp; tex(f);
     }

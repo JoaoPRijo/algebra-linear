@@ -131,3 +131,7 @@ table.tab th { background: color-mix(in srgb, var(--mcazul) 10%, white); }
 
 /* Diagrama V -> W */
 svg.diag text { font-family: inherit; }
+
+/* Fragmentos ainda por aparecer ficam esbatidos (dá para ver o slide todo logo de início) */
+.reveal .slides section .fragment:not(.visible) { opacity: 0.18; visibility: inherit; }
+.reveal .slides section .fragment { transition: opacity .35s ease; }
