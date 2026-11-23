@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valores e Vetores Próprios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="../../assets/css/ma.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ===================== TÍTULO ===================== -->
+<section class="titulo">
+  <div><img src="../../assets/img/iscte_sintra_logo.png" alt="Iscte Sintra" style="height:90px;margin-bottom:30px" onerror="this.remove()"></div>
+  <div class="tema">Tema 6</div>
+  <h1>Valores e Vetores Próprios</h1>
+  <p class="autor">João Rijo</p>
+  <p class="inst">Iscte Sintra</p>
+</section>
+
+<!-- ===================== REVISÃO ===================== -->
+<section class="seccao">
+  <h1>Revisão: transformações lineares</h1>
+  <p>Operações, composição, núcleo, imagem, teorema da dimensão e invertibilidade</p>
+</section>
+
+<section>
+  <h2 class="ft">Transformações lineares</h2>
+  <div class="cols c46">
+    <div>
+      <div class="bloco"><div class="bt">Transformação linear</div><div class="bc">
+        <p>\(T\colon V\to W\) é <strong>linear</strong> se, para quaisquer \(u,v\in V\) e \(\alpha\in\R\),</p>
+        <p class="center">\(T(u+v)=T(u)+T(v)\)<br>\(T(\alpha u)=\alpha\,T(u)\)</p>
+      </div></div>
+      <div class="bloco obs fragment"><div class="bt">Relembrar</div><div class="bc small">
+        <p>Se \(T\colon\R^2\to\R^2\), então \(T(x)=Ax\), onde as colunas de \(A\) são \(T(e_1)\) e \(T(e_2)\).</p>
+        <p>Experimenta: muda as entradas de \(A\) e vê como a grelha é deformada.</p>
+      </div></div>
+    </div>
+    <div class="plano2d" data-config='{"matriz":[2,1,-1,1],"modo":["grelha"],"editavel":true,"t":1,"alcance":4,"mostrarValores":false}'></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Operações algébricas e composição</h2>
+  <div class="cols">
+    <div>
+      <div class="bloco"><div class="bt">Soma e produto por escalar</div><div class="bc small">
+        <p>Sejam \(T,S\colon V\to W\) lineares e \(\alpha\in\R\). Então \(T+S\) e \(\alpha T\) são lineares e</p>
+        <p class="center">\((T+S)_{CB}=T_{CB}+S_{CB}, \qquad (\alpha T)_{CB}=\alpha\,T_{CB}\)</p>
+      </div></div>
+      <div class="bloco"><div class="bt">Composição</div><div class="bc small">
+        <p>Sejam \(T\colon V\to U\) e \(S\colon U\to W\) lineares. A composição \((S\circ T)(v)=S(T(v))\) é linear e</p>
+        <p class="center">\((S\circ T)_{DB}=S_{DC}\,T_{CB}\)</p>
+        <p>A matriz da composição é o <strong>produto</strong> das matrizes.</p>
+      </div></div>
+    </div>
+    <div>
+      <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc small">
+        <p>\(T(x,y)=(x+y,\,x-y)\) e \(S(x,y)=(2x,\,3y)\).</p>
+        <p class="center">\(A_T=\begin{bmatrix}1&1\\1&-1\end{bmatrix},\quad A_S=\begin{bmatrix}2&0\\0&3\end{bmatrix}\)</p>
+        <p class="fragment">Matriz de \(S\circ T\): <span class="revelar">\(A_SA_T=\begin{bmatrix}2&2\\3&-3\end{bmatrix}\)</span></p>
+        <p class="fragment">Matriz de \(T\circ S\): <span class="revelar">\(A_TA_S=\begin{bmatrix}2&3\\2&-3\end{bmatrix}\)</span></p>
+        <p class="fragment">Em geral \(S\circ T\neq T\circ S\)!</p>
+      </div></div>
+      <p class="tiny muted">Clica nas caixas laranja para revelar a resposta.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Núcleo e imagem</h2>
+  <div class="cols c64">
+    <div>
+      <div class="bloco"><div class="bt">Núcleo e imagem de \(T\colon V\to W\)</div><div class="bc small">
+        <p>\(\mathcal{N}(T)=\{v\in V\colon T(v)=0\}\) &nbsp;(núcleo)</p>
+        <p>\(\imagem(T)=\{w\in W\colon w=T(v)\text{ para algum } v\in V\}\) &nbsp;(imagem)</p>
+      </div></div>
+      <div class="bloco fragment"><div class="bt">Teorema e definição</div><div class="bc small">
+        <ul>
+          <li>\(\mathcal{N}(T)\) é subespaço de \(V\) e \(\imagem(T)\) é subespaço de \(W\)</li>
+          <li><strong>Nulidade:</strong> \(\nul(T)=\dim\mathcal{N}(T)\)</li>
+          <li><strong>Característica:</strong> \(\car(T)=\dim\imagem(T)\)</li>
+        </ul>
+      </div></div>
+      <div class="bloco obs fragment"><div class="bt">Observação</div><div class="bc small">
+        Se \(T(x)=Ax\), então \(\mathcal{N}(T)=\mathcal{N}(A)\) e \(\imagem(T)=\col(A)\).
+      </div></div>
+    </div>
+    <svg class="diag" viewBox="0 0 420 300" style="width:100%">
+      <defs><marker id="pt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#003e74"/></marker>
+            <marker id="pt2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+      <text x="40" y="40" font-size="26" font-style="italic">V</text>
+      <text x="360" y="40" font-size="26" font-style="italic">W</text>
+      <circle cx="105" cy="160" r="90" fill="#f4f6f9" stroke="#333" stroke-width="2"/>
+      <circle cx="315" cy="160" r="90" fill="#f4f6f9" stroke="#333" stroke-width="2"/>
+      <path d="M160,40 Q210,10 260,40" fill="none" stroke="#333" stroke-width="2" marker-end="url(#pt2)"/>
+      <text x="203" y="22" font-size="22" font-style="italic">T</text>
+      <ellipse cx="90" cy="165" rx="38" ry="30" fill="rgba(0,62,116,.15)" stroke="#003e74" stroke-width="2"/>
+      <text x="65" y="172" font-size="18" fill="#003e74">𝒩(T)</text>
+      <ellipse cx="320" cy="150" rx="55" ry="45" fill="rgba(0,118,96,.15)" stroke="#007660" stroke-width="2"/>
+      <text x="290" y="135" font-size="18" fill="#007660">Im(T)</text>
+      <circle cx="322" cy="168" r="4" fill="#003e74"/><text x="330" y="175" font-size="16">0</text>
+      <path d="M100,140 Q210,120 316,165" fill="none" stroke="#003e74" stroke-width="1.6" marker-end="url(#pt)"/>
+      <path d="M95,192 Q210,215 316,171" fill="none" stroke="#003e74" stroke-width="1.6" marker-end="url(#pt)"/>
+      <path d="M60,90 Q190,40 290,108" fill="none" stroke="#007660" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <path d="M70,235 Q200,260 290,190" fill="none" stroke="#007660" stroke-width="1.4" stroke-dasharray="5 4"/>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Teorema da dimensão</h2>
+  <div class="bloco"><div class="bt">Teorema da dimensão</div><div class="bc center">
+    Seja \(T\colon V\to W\) uma transformação linear. Então \(\quad\dim(V)=\nul(T)+\car(T)\)
+  </div></div>
+  <div class="bloco exercicio"><div class="bt">Exercício — completa a tabela (clica para verificar)</div><div class="bc">
+    <table class="tab">
+      <tr><th></th><th>\(\dim(V)\)</th><th>\(\car(T)\)</th><th>\(\nul(T)\)</th></tr>
+      <tr><td>\(T\colon\R^6\to\R^3\)</td><td>\(6\)</td><td>\(2\)</td><td><span class="revelar">\(4\)</span></td></tr>
+      <tr><td>\(T\colon M_{3\times3}\to P_4\)</td><td><span class="revelar">\(9\)</span></td><td><span class="revelar">\(4\)</span></td><td>\(5\)</td></tr>
+      <tr><td>\(T\colon\R^8\to P_3\)</td><td><span class="revelar">\(8\)</span></td><td>\(4\)</td><td><span class="revelar">\(4\)</span></td></tr>
+      <tr><td>\(T\colon P_9\to M_{2\times4}\)</td><td><span class="revelar">\(10\)</span></td><td><span class="revelar">\(4\)</span></td><td>\(6\)</td></tr>
+      <tr><td>\(T\colon M_{4\times4}\to M_{3\times5}\)</td><td><span class="revelar">\(16\)</span></td><td>\(11\)</td><td><span class="revelar">\(5\)</span></td></tr>
+    </table>
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Invertibilidade</h2>
+  <div class="cols">
+    <div>
+      <div class="bloco"><div class="bt">Teorema</div><div class="bc small">
+        <p>Seja \(T\colon V\to W\) linear. São equivalentes:</p>
+        <ol>
+          <li>\(T\) é invertível</li>
+          <li>\(T\) é injetiva (pontos distintos de \(V\) vão para pontos distintos de \(W\))</li>
+          <li>\(\mathcal{N}(T)=\{0\}\)</li>
+        </ol>
+      </div></div>
+      <div class="bloco fragment"><div class="bt">Proposição</div><div class="bc small">
+        Se \(A\) representa \(T\) em relação a bases de \(V\) e de \(T(V)\), então \(T\) é invertível se e só se \(A\) é invertível, e \(T^{-1}\) é representada por \(A^{-1}\).
+      </div></div>
+    </div>
+    <div>
+      <div class="bloco obs fragment"><div class="bt">Consequência do teorema da dimensão</div><div class="bc small">
+        <p>Se \(\dim(W)<\dim(V)\), então \(T\colon V\to W\) <strong>não pode ser invertível</strong>.</p>
+        <p>Por exemplo, para \(T\colon\R^3\to\R^2\): \(\car(T)\le 2\), logo</p>
+        <p class="center">\(\nul(T)=3-\car(T)\ge 1\)</p>
+        <p>e \(\mathcal{N}(T)\neq\{0\}\).</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Invertibilidade — exemplo</h2>
+  <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc">
+    <p>\(T\colon\R^2\to\R^2\), \(T(x,y)=(x+y,\,x-y)\). \(T\) é invertível? Se sim, qual é \(T^{-1}\)?</p>
+    <div class="cols">
+      <div>
+        <p class="fragment">\(T(x,y)=\underbrace{\begin{bmatrix}1&1\\1&-1\end{bmatrix}}_{A}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
+        <p class="fragment small">\(\left[\begin{array}{cc|cc}1&1&1&0\\1&-1&0&1\end{array}\right]\to\cdots\to\left[\begin{array}{cc|cc}1&0&\frac12&\frac12\\0&1&\frac12&-\frac12\end{array}\right]\)</p>
+      </div>
+      <div>
+        <p class="fragment">\(A\) é invertível, logo \(T\) é invertível e</p>
+        <p class="fragment">\(T^{-1}(x,y)=A^{-1}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}\frac12&\frac12\\[4pt]\frac12&-\frac12\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
+        <p class="fragment center">\(T^{-1}(x,y)=\left(\dfrac{x}{2}+\dfrac{y}{2},\ \dfrac{x}{2}-\dfrac{y}{2}\right)\)</p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Perguntas rápidas</h2>
+  <div class="cols">
+    <div class="quiz" data-certo="2" data-explica="Como \(\dim(\R^3)=3>2\), temos \(\nul(T)\ge1\).">
+      <div class="q">1. Uma transformação linear \(T\colon\R^3\to\R^2\) pode ser invertível?</div>
+      <div class="opts">
+        <div class="opt">Sim, sempre</div><div class="opt">Depende de \(T\)</div>
+        <div class="opt">Nunca</div><div class="opt">Só se \(\car(T)=3\)</div>
+      </div>
+      <div class="fb"></div>
+    </div>
+    <div class="quiz" data-certo="3" data-explica="\(\nul(T)=0\), logo \(\car(T)=4-0=4\) e \(T\) é invertível.">
+      <div class="q">2. \(T\colon\R^4\to\R^4\) tem \(\mathcal{N}(T)=\{0\}\). Quanto vale \(\car(T)\)?</div>
+      <div class="opts">
+        <div class="opt">\(0\)</div><div class="opt">\(1\)</div>
+        <div class="opt">\(3\)</div><div class="opt">\(4\)</div>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+  <div class="quiz" style="margin-top:22px" data-certo="1" data-explica="As colunas de \(A\) são \(T(e_1)=(1,0)\) e \(T(e_2)=(2,0)\), que geram só o eixo dos \(x\): \(\car(T)=1\) e \(\nul(T)=1\).">
+    <div class="q">3. \(T(x,y)=(x+2y,\,0)\). Qual é a nulidade de \(T\)?</div>
+    <div class="opts" style="grid-template-columns:repeat(4,1fr)">
+      <div class="opt">\(0\)</div><div class="opt">\(1\)</div><div class="opt">\(2\)</div><div class="opt">\(3\)</div>
+    </div>
+    <div class="fb"></div>
+  </div>
+</section>
+
+<!-- ===================== VALORES E VETORES PRÓPRIOS ===================== -->
+<section class="seccao">
+  <h1>Valores e vetores próprios</h1>
+  <p>Que vetores mantêm a direção quando aplicamos \(T\)?</p>
+</section>
+
+<section>
+  <h2 class="ft">Motivação</h2>
+  <div class="cols c46">
+    <div>
+      <p>Seja \(T(x,y)=(3x+y,\,-2x)\), isto é,</p>
+      <p class="center">\(A=\begin{bmatrix}3&1\\-2&0\end{bmatrix}\)</p>
+      <p>Arrasta o vetor <b class="blue">\(v\)</b> e observa <b class="orange">\(Av\)</b>.</p>
+      <ul class="small">
+        <li class="fragment">Em geral, \(Av\) aponta para uma <strong>direção diferente</strong> de \(v\).</li>
+        <li class="fragment">Mas há direções especiais em que \(Av\) fica <strong>na mesma reta</strong> que \(v\): \(Av=\lambda v\).</li>
+        <li class="fragment">Consegues encontrar duas?</li>
+      </ul>
+    </div>
+    <div class="plano2d" data-config='{"matriz":[3,1,-2,0],"modo":["vetor"],"botoes":["proprios","grelha"],"t":1,"alcance":4.5,"vetor":[1,0.5],"mostrarValores":false}'></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Muitos vetores ao mesmo tempo</h2>
+  <div class="cols c46">
+    <div>
+      <p>Aplicamos \(A\) a vetores em todas as direções (carrega em <b>▶ Aplicar A</b>).</p>
+      <ul class="small">
+        <li>O círculo transforma-se numa elipse.</li>
+        <li>Os vetores a <b style="color:#d99a00">dourado</b> não mudam de reta: são <strong>vetores próprios</strong>.</li>
+        <li class="fragment">Liga <i>Direções próprias</i>: as retas não se mexem durante toda a animação.</li>
+      </ul>
+      <div class="bloco obs fragment"><div class="bt">Observação</div><div class="bc tiny">
+        A animação usa \((1-t)I+tA\), com \(t\) de \(0\) a \(1\). Se \(Av=\lambda v\), então \(\big((1-t)I+tA\big)v=(1-t+t\lambda)v\): as direções próprias são sempre as mesmas.
+      </div></div>
+    </div>
+    <div class="plano2d" data-config='{"matriz":[3,1,-2,0],"modo":["circulo"],"botoes":["circulo","proprios","grelha"],"t":0,"alcance":4,"mostrarValores":false}'></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Definição</h2>
+  <div class="bloco"><div class="bt">Valor próprio e vetor próprio</div><div class="bc small">
+    <p>Seja \(T\colon V\to V\) linear. Um número real \(\lambda\) é um <strong>valor próprio</strong> de \(T\) se existe um vetor <span class="red">\(v\neq 0\)</span> em \(V\) tal que</p>
+    <p class="center"><span class="caixa">\(T(v)=\lambda\, v\)</span></p>
+    <p>Neste caso, \(v\) diz-se um <strong>vetor próprio</strong> associado ao valor próprio \(\lambda\).</p>
+  </div></div>
+  <div class="bloco fragment"><div class="bt">Espaço próprio</div><div class="bc small">
+    <p>Dado um valor próprio \(\lambda\), o conjunto \(\quad E(\lambda)=\{v\in V\colon T(v)=\lambda v\}\quad\) é um subespaço de \(V\), o <strong>espaço próprio</strong> associado a \(\lambda\).</p>
+    <p>A dimensão de \(E(\lambda)\) é a <strong>multiplicidade geométrica</strong> de \(\lambda\): \(\ m_g(\lambda)=\dim E(\lambda)\).</p>
+  </div></div>
+  <div class="bloco obs fragment"><div class="bt">Observação</div><div class="bc small">
+    \(E(\lambda)\) contém os vetores próprios associados a \(\lambda\) e o vetor nulo. Se \(\lambda=0\) é valor próprio, então \(E(0)=\mathcal{N}(T)\).
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Como determinar os valores próprios?</h2>
+  <p>Seja \(\lambda\) um valor próprio e \(v\) um vetor próprio associado a \(\lambda\):</p>
+  <div class="center" style="font-size:1.05em;line-height:2.1">
+    <span class="fragment">\(T(v)=\lambda v\)</span>
+    <span class="fragment">\(\ \Leftrightarrow\ T(v)-\lambda I(v)=0\)</span>
+    <span class="fragment">\(\ \Leftrightarrow\ (T-\lambda I)(v)=0\)</span><br>
+    <span class="fragment">\(\ \Leftrightarrow\ \mathcal{N}(T-\lambda I)\neq\{0\}\)</span>
+    <span class="fragment">\(\ \Leftrightarrow\ \) <span class="caixa">\(\det(T-\lambda I)=0\)</span></span>
+  </div>
+  <div class="bloco fragment" style="margin-top:20px"><div class="bt">Polinómio e equação característica</div><div class="bc">
+    <ul>
+      <li>\(p(\lambda)=\det(A-\lambda I)\) é o <strong>polinómio característico</strong> (de grau \(n\) se \(A\) é \(n\times n\))</li>
+      <li>\(\det(A-\lambda I)=0\) é a <strong>equação característica</strong></li>
+      <li>Os valores próprios são as soluções da equação característica; os vetores próprios associados a \(\lambda\) são os vetores não nulos de \(E(\lambda)=\mathcal{N}(A-\lambda I)\)</li>
+    </ul>
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo — valores próprios</h2>
+  <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc">
+    <p>\(T\colon\R^2\to\R^2\), \(\ T(x,y)=(3x+y,\,-2x)\), \(\quad T(x,y)=\begin{bmatrix}3&1\\-2&0\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
+    <div class="cols c64">
+      <div>
+        <p class="fragment">\(T-\lambda I=\begin{bmatrix}3&1\\-2&0\end{bmatrix}-\lambda\begin{bmatrix}1&0\\0&1\end{bmatrix}=\begin{bmatrix}3-\lambda&1\\-2&-\lambda\end{bmatrix}\)</p>
+        <p class="fragment">\(\det(T-\lambda I)=0\ \Leftrightarrow\ (3-\lambda)(-\lambda)+2=0\)</p>
+        <p class="fragment">\(\Leftrightarrow\ \underbrace{\lambda^2-3\lambda+2}_{\text{polinómio característico}}=0\)</p>
+      </div>
+      <div>
+        <p class="fragment">\(\Leftrightarrow\ \lambda=\dfrac{3\pm\sqrt{9-8}}{2}=\dfrac{3\pm1}{2}\)</p>
+        <p class="fragment center" style="font-size:1.15em">\(\Leftrightarrow\ \) <span class="caixa">\(\lambda_1=1\)</span> \(\ \vee\ \) <span class="caixa">\(\lambda_2=2\)</span></p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo — espaços próprios</h2>
+  <div class="cols">
+    <div class="bloco exemplo"><div class="bt">\(E(\lambda_1)=\mathcal{N}(T-1\cdot I)\)</div><div class="bc small">
+      <p>\(T-1\cdot I=\begin{bmatrix}2&1\\-2&-1\end{bmatrix}\)</p>
+      <p class="fragment">\(\left[\begin{array}{cc|c}2&1&0\\-2&-1&0\end{array}\right]\to\left[\begin{array}{cc|c}2&1&0\\0&0&0\end{array}\right]\)</p>
+      <p class="fragment">\(\Leftrightarrow 2x+y=0\Leftrightarrow x=-\dfrac{y}{2}\)</p>
+      <p class="fragment">\(\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}-\frac{y}{2}\\y\end{bmatrix}=y\begin{bmatrix}-\frac12\\1\end{bmatrix}\)</p>
+      <p class="fragment">\(E(1)\) é gerado por \(v_1=\left(-\tfrac12,1\right)\)</p>
+    </div></div>
+    <div class="bloco exemplo"><div class="bt">\(E(\lambda_2)=\mathcal{N}(T-2\cdot I)\)</div><div class="bc small">
+      <p>\(T-2\cdot I=\begin{bmatrix}1&1\\-2&-2\end{bmatrix}\)</p>
+      <p class="fragment">\(\left[\begin{array}{cc|c}1&1&0\\-2&-2&0\end{array}\right]\to\left[\begin{array}{cc|c}1&1&0\\0&0&0\end{array}\right]\)</p>
+      <p class="fragment">\(\Leftrightarrow x+y=0\Leftrightarrow x=-y\)</p>
+      <p class="fragment">\(\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}-y\\y\end{bmatrix}=y\begin{bmatrix}-1\\1\end{bmatrix}\)</p>
+      <p class="fragment">\(E(2)\) é gerado por \(v_2=(-1,1)\)</p>
+    </div></div>
+  </div>
+  <p class="fragment small center">\(m_g(1)=m_g(2)=1\). Verificação: \(A v_1=\left(-\tfrac32+1,\,1\right)=\left(-\tfrac12,1\right)=1\cdot v_1\) e \(Av_2=(-2,2)=2\,v_2\). ✓</p>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo — o que fazem os vetores próprios?</h2>
+  <div class="cols c46">
+    <div>
+      <p>\(A=\begin{bmatrix}3&1\\-2&0\end{bmatrix}\)</p>
+      <ul class="small">
+        <li>Na reta <b class="purple">\(E(1)\)</b> os vetores <strong>não se alteram</strong>: \(Av=v\).</li>
+        <li>Na reta <b style="color:#d99a00">\(E(2)\)</b> os vetores são <strong>multiplicados por 2</strong>: \(Av=2v\).</li>
+        <li>Os restantes vetores mudam de direção.</li>
+      </ul>
+      <p class="small">Arrasta \(v\) para cima de uma das retas (o vetor “cola-se” a elas) e carrega em <b>▶ Aplicar A</b>.</p>
+    </div>
+    <div class="plano2d" data-config='{"matriz":[3,1,-2,0],"modo":["grelha","proprios","vetor"],"botoes":["grelha","proprios","vetor","circulo"],"t":1,"alcance":4,"vetor":[-1,1],"mostrarValores":true}'></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Galeria de transformações do plano</h2>
+  <div class="cols c64">
+    <div class="plano2d" data-config='{"matriz":[0,-1,1,0],"modo":["circulo","proprios"],"botoes":["grelha","circulo","proprios","vetor"],"presets":true,"editavel":true,"t":1,"alcance":3.5,"mostrarValores":true}'></div>
+    <div class="small">
+      <p>Escolhe um exemplo e tenta prever antes de animar:</p>
+      <ul class="small" style="line-height:1.4">
+        <li><b>Rotação 90°</b>: nenhum vetor mantém a direção → sem valores próprios reais.</li>
+        <li class="fragment"><b>Reflexão</b>: \(\lambda=1\) (a reta \(y=x\)) e \(\lambda=-1\) (a reta \(y=-x\)).</li>
+        <li class="fragment"><b>Cisalhamento</b>: \(\lambda=1\) é raiz dupla mas só há uma direção própria (\(m_g=1\)).</li>
+        <li class="fragment"><b>Escala 2I</b>: todos os vetores são vetores próprios (\(\lambda=2\)).</li>
+        <li class="fragment"><b>Projeção</b>: \(\lambda=0\) e \(E(0)=\mathcal{N}(T)\).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Pergunta rápida: será vetor próprio?</h2>
+  <p class="small">Calcula \(Av\) e decide. Carrega em <b>Nova pergunta</b> para gerar outra matriz.</p>
+  <div class="gerador-vp" style="margin-top:20px"></div>
+</section>
+
+<section>
+  <h2 class="ft">A ideia da diagonalização</h2>
+  <div class="cols">
+    <div>
+      <p class="small">No exemplo, \(T(x,y)=(3x+y,-2x)\) tem valores próprios \(\lambda_1=1\), \(\lambda_2=2\) e vetores próprios \(v_1=\left(-\frac12,1\right)\), \(v_2=(-1,1)\).</p>
+      <div class="bloco ideia fragment"><div class="bt">Ideia</div><div class="bc small">
+        <p>Se usarmos a base \(B=\{v_1,v_2\}\), como \(T(v_1)=\lambda_1v_1\) e \(T(v_2)=\lambda_2 v_2\), a matriz de \(T\) nesta base é</p>
+        <p class="center">\(T_{BB}=\begin{bmatrix}\lambda_1&0\\0&\lambda_2\end{bmatrix}\) &nbsp; (diagonal!)</p>
+      </div></div>
+    </div>
+    <div>
+      <p class="fragment small">\(Av_1=\lambda_1v_1,\ Av_2=\lambda_2v_2\) \(\ \Leftrightarrow\ \)</p>
+      <p class="fragment small">\(A\begin{bmatrix}|&|\\v_1&v_2\\|&|\end{bmatrix}=\begin{bmatrix}|&|\\\lambda_1v_1&\lambda_2v_2\\|&|\end{bmatrix}=\begin{bmatrix}|&|\\v_1&v_2\\|&|\end{bmatrix}\begin{bmatrix}\lambda_1&0\\0&\lambda_2\end{bmatrix}\)</p>
+      <p class="fragment center" style="font-size:1.1em"><span class="caixa">\(A=PDP^{-1}\)</span></p>
+      <p class="fragment small">\(\begin{bmatrix}3&1\\-2&0\end{bmatrix}=\begin{bmatrix}-\frac12&-1\\1&1\end{bmatrix}\begin{bmatrix}1&0\\0&2\end{bmatrix}\begin{bmatrix}2&2\\-2&-1\end{bmatrix}\)</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Matrizes semelhantes e diagonalizáveis</h2>
+  <div class="bloco"><div class="bt">Definição</div><div class="bc">
+    <ul>
+      <li>Duas matrizes \(A\) e \(B\) dizem-se <strong>semelhantes</strong> se existe uma matriz invertível \(P\) tal que \(\ A=PBP^{-1}\).</li>
+      <li class="fragment">Uma matriz \(A\) diz-se <strong>diagonalizável</strong> se for semelhante a uma matriz diagonal.</li>
+    </ul>
+  </div></div>
+  <div class="bloco fragment"><div class="bt">Proposição</div><div class="bc">
+    Uma matriz \(A\) \(n\times n\) é diagonalizável se e só se existe uma base de \(\R^n\) formada por vetores próprios de \(A\).<br>
+    Nesse caso \(A=PDP^{-1}\), onde as colunas de \(P\) são os vetores próprios e \(D\) tem os valores próprios na diagonal (pela mesma ordem).
+  </div></div>
+  <div class="bloco obs fragment"><div class="bt">Pergunta</div><div class="bc">Quando é que uma matriz \(A\) \(n\times n\) é diagonalizável?</div></div>
+</section>
+
+<section>
+  <h2 class="ft">Multiplicidades e diagonalização</h2>
+  <div class="bloco"><div class="bt">Multiplicidade algébrica</div><div class="bc small">
+    <p>Se \(\det(A-\lambda I)=\pm(\lambda-\lambda_1)^{m_1}(\lambda-\lambda_2)^{m_2}\cdots(\lambda-\lambda_k)^{m_k}\), com \(\lambda_1,\dots,\lambda_k\) distintos, então \(m_a(\lambda_i)=m_i\) é a <strong>multiplicidade algébrica</strong> de \(\lambda_i\).</p>
+  </div></div>
+  <div class="bloco fragment"><div class="bt">Proposição</div><div class="bc center">
+    Se \(\lambda\) é valor próprio, então \(\quad 1\le m_g(\lambda)\le m_a(\lambda)\)
+  </div></div>
+  <div class="bloco fragment"><div class="bt">Teorema</div><div class="bc small">
+    Uma matriz \(A\) \(n\times n\) é diagonalizável se e só se todas as raízes do polinómio característico são <strong>reais</strong> e, para cada valor próprio, \(m_g(\lambda)=m_a(\lambda)\).
+  </div></div>
+  <div class="bloco fragment"><div class="bt">Corolário</div><div class="bc small">
+    Se \(A\) \(n\times n\) tem \(n\) valores próprios reais <strong>distintos</strong>, então \(A\) é diagonalizável.
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo 3×3 — valores próprios</h2>
+  <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc small">
+    <div class="cols">
+      <div>
+        <p>\(A=\begin{bmatrix}2&1&1\\2&3&2\\3&3&4\end{bmatrix}\)</p>
+        <p><b>1.º passo:</b> polinómio característico</p>
+        <p class="fragment">\(\det(A-\lambda I)=\det\begin{bmatrix}2-\lambda&1&1\\2&3-\lambda&2\\3&3&4-\lambda\end{bmatrix}\)</p>
+        <p class="fragment">\(=(2-\lambda)\big[(3-\lambda)(4-\lambda)-6\big]-\big[2(4-\lambda)-6\big]+\big[6-3(3-\lambda)\big]\)</p>
+        <p class="fragment">\(=-\lambda^3+9\lambda^2-15\lambda+7\)</p>
+      </div>
+      <div>
+        <p class="fragment">\(\lambda=1\) é raiz. Regra de Ruffini:</p>
+        <p class="fragment">\(\begin{array}{c|cccc}&-1&9&-15&7\\1&&-1&8&-7\\\hline&-1&8&-7&\color{#c0182b}{0}\end{array}\)</p>
+        <p class="fragment">\(-\lambda^2+8\lambda-7=0\Leftrightarrow\lambda=1\ \vee\ \lambda=7\)</p>
+        <p class="fragment">\(\det(A-\lambda I)=-(\lambda-1)^2(\lambda-7)\)</p>
+        <p class="fragment"><span class="caixa">\(\lambda_1=1,\ m_a(1)=2\)</span> &nbsp; <span class="caixa">\(\lambda_2=7,\ m_a(7)=1\)</span></p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo 3×3 — espaços próprios</h2>
+  <div class="cols">
+    <div class="bloco exemplo"><div class="bt">2.º passo: \(E(1)=\mathcal{N}(A-1\cdot I)\)</div><div class="bc small">
+      <p>\(\left[\begin{array}{ccc|c}1&1&1&0\\2&2&2&0\\3&3&3&0\end{array}\right]\to\left[\begin{array}{ccc|c}\color{#c0182b}{1}&1&1&0\\0&0&0&0\\0&0&0&0\end{array}\right]\)</p>
+      <p class="fragment">\(\Leftrightarrow x+y+z=0\Leftrightarrow x=-y-z\) &nbsp; (\(y,z\) livres)</p>
+      <p class="fragment">\(\begin{bmatrix}x\\y\\z\end{bmatrix}=y\begin{bmatrix}-1\\1\\0\end{bmatrix}+z\begin{bmatrix}-1\\0\\1\end{bmatrix}\)</p>
+      <p class="fragment">\(m_g(1)=2=m_a(1)\) ✓</p>
+    </div></div>
+    <div>
+      <div class="bloco exercicio"><div class="bt">Exercício</div><div class="bc small">
+        <p>Determina \(E(7)\). &nbsp; <span class="revelar">\(E(7)\) é gerado por \((1,2,3)\)</span></p>
+        <p><b>3.º passo:</b> escreve a base de vetores próprios, \(P\) e \(D\).</p>
+        <p class="center"><span class="revelar">\(P=\begin{bmatrix}-1&-1&1\\1&0&2\\0&1&3\end{bmatrix},\ D=\begin{bmatrix}1&0&0\\0&1&0\\0&0&7\end{bmatrix}\)</span></p>
+      </div></div>
+      <div class="bloco obs fragment"><div class="bt">Conclusão</div><div class="bc small">
+        Todas as raízes são reais e \(m_g=m_a\) para cada valor próprio, logo \(A\) é diagonalizável e \(A=PDP^{-1}\).
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Exemplo 3×3 — visualização</h2>
+  <div class="cols" style="grid-template-columns:1.7fr 1fr">
+    <div class="espaco3d" data-config='{"matriz":[2,1,1,2,3,2,3,3,4],"t":0,"raio":1,"altura":380,"distancia":7.5}'></div>
+    <div class="small">
+      <p>Roda a figura com o rato e carrega em <b>▶ Aplicar A</b>.</p>
+      <ul class="small" style="line-height:1.4">
+        <li>O <b class="purple">plano</b> \(E(1)\): \(x+y+z=0\). Os vetores neste plano <strong>não se alteram</strong>.</li>
+        <li>A <b style="color:#d99a00">reta</b> \(E(7)\), gerada por \((1,2,3)\): os vetores são <strong>esticados 7 vezes</strong>.</li>
+        <li>A esfera transforma-se num elipsoide “esticado” na direção de \(E(7)\).</li>
+        <li>Setas a dourado: vetores próprios.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Galeria de transformações do espaço</h2>
+  <div class="cols" style="grid-template-columns:1.7fr 1fr">
+    <div class="espaco3d" data-config='{"matriz":[0,-1,0,1,0,0,0,0,1],"t":0,"raio":1,"altura":360,"presets":true,"editavel":true,"distancia":6.5}'></div>
+    <div class="small">
+      <p>Antes de animar, tenta prever os espaços próprios:</p>
+      <ul class="small" style="line-height:1.4">
+        <li><b>Rotação em torno de \(z\)</b>: só o eixo de rotação é preservado (\(\lambda=1\)); os outros dois valores próprios são complexos.</li>
+        <li><b>Projeção no plano \(xy\)</b>: \(E(1)\) é o plano \(xy\) e \(E(0)=\mathcal{N}(T)\) é o eixo \(z\).</li>
+        <li><b>Cisalhamento</b>: \(m_a(1)=2\) mas \(m_g(1)=1\) → não diagonalizável.</li>
+        <li><b>Reflexão</b>: \(E(1)\) plano \(xy\), \(E(-1)\) eixo \(z\).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Flashcards</h2>
+  <p class="tiny muted">Clica num cartão para o virar.</p>
+  <div class="flashcards">
+    <div class="flash"><div class="in"><div class="f">O que é um vetor próprio de \(T\)?</div><div class="v">Um vetor \(v\neq0\) tal que \(T(v)=\lambda v\) para algum \(\lambda\in\R\).</div></div></div>
+    <div class="flash"><div class="in"><div class="f">Como se calculam os valores próprios de \(A\)?</div><div class="v">Resolvendo a equação característica \(\det(A-\lambda I)=0\).</div></div></div>
+    <div class="flash"><div class="in"><div class="f">O que é \(E(\lambda)\)?</div><div class="v">O espaço próprio \(E(\lambda)=\mathcal{N}(A-\lambda I)\): os vetores próprios associados a \(\lambda\) e o vetor nulo.</div></div></div>
+    <div class="flash"><div class="in"><div class="f">\(0\) é valor próprio de \(A\). O que podemos concluir?</div><div class="v">\(\mathcal{N}(A)\neq\{0\}\), logo \(\det(A)=0\) e \(A\) não é invertível. Além disso \(E(0)=\mathcal{N}(A)\).</div></div></div>
+    <div class="flash"><div class="in"><div class="f">Qual a relação entre \(m_g(\lambda)\) e \(m_a(\lambda)\)?</div><div class="v">\(1\le m_g(\lambda)\le m_a(\lambda)\)</div></div></div>
+    <div class="flash"><div class="in"><div class="f">Quando é que \(A\) \(n\times n\) é diagonalizável?</div><div class="v">Quando todos os valores próprios são reais e \(m_g(\lambda)=m_a(\lambda)\) para cada um (equivalentemente, há uma base de vetores próprios).</div></div></div>
+    <div class="flash"><div class="in"><div class="f">Se \(A=PDP^{-1}\), o que são as colunas de \(P\) e a diagonal de \(D\)?</div><div class="v">As colunas de \(P\) são vetores próprios; a diagonal de \(D\) tem os valores próprios correspondentes, pela mesma ordem.</div></div></div>
+    <div class="flash"><div class="in"><div class="f">\(A\) \(3\times3\) tem valores próprios \(1, 2, 5\). É diagonalizável?</div><div class="v">Sim: tem \(3\) valores próprios reais distintos.</div></div></div>
+    <div class="flash"><div class="in"><div class="f">Uma rotação de \(90^\circ\) no plano tem valores próprios reais?</div><div class="v">Não: \(\lambda^2+1=0\) não tem soluções reais. Nenhuma direção é preservada.</div></div></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="ft">Resumo: como diagonalizar uma matriz \(A\)</h2>
+  <div class="bloco"><div class="bt">1.º passo — valores próprios</div><div class="bc small">
+    Escrever o polinómio característico \(\det(A-\lambda I)\) e resolver a equação característica \(\det(A-\lambda I)=0\). Registar \(m_a(\lambda)\) de cada raiz.
+  </div></div>
+  <div class="bloco fragment"><div class="bt">2.º passo — espaços próprios</div><div class="bc small">
+    Para cada \(\lambda\), determinar \(E(\lambda)=\mathcal{N}(A-\lambda I)\) por eliminação de Gauss e calcular \(m_g(\lambda)=\dim E(\lambda)\).
+  </div></div>
+  <div class="bloco fragment"><div class="bt">3.º passo — base de vetores próprios</div><div class="bc small">
+    Se todas as raízes são reais e \(m_g(\lambda)=m_a(\lambda)\) para todo o \(\lambda\), juntar as bases dos espaços próprios: são as colunas de \(P\), e \(A=PDP^{-1}\).
+    Caso contrário, \(A\) não é diagonalizável.
+  </div></div>
+</section>
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/katex-config.js"></script>
+<script src="../../assets/js/plano2d.js"></script>
+<script src="../../assets/js/interativos.js"></script>
+<script type="module" src="../../assets/js/espaco3d.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280, height: 720, margin: 0.03,
+    center: false, hash: true, slideNumber: 'c/t',
+    transition: 'slide', transitionSpeed: 'fast',
+    pdfSeparateFragments: false
+  });
+</script>
+</body>
+</html>

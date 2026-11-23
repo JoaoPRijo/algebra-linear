@@ -1,0 +1,133 @@
+/* Tema comum dos slides web — cores iguais ao preâmbulo beamer (preambulo-ala.tex) */
+:root {
+  --mcazul: #003e74;
+  --mcverde: #007660;
+  --mclaranja: #cc5c00;
+  --mcroxo: #683a8c;
+  --mcteal: #007896;
+  --mccinza: #5a5a5a;
+  --vermelho: #c0182b;
+  --fundo: #ffffff;
+  --texto: #1b1b1b;
+}
+
+.reveal-viewport { background: var(--fundo); }
+.reveal {
+  font-family: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-size: 30px;
+  color: var(--texto);
+}
+.reveal .slides { text-align: left; }
+.reveal .slides section { height: 100%; }
+.reveal p, .reveal li { line-height: 1.35; }
+.reveal ul, .reveal ol { margin-left: 1.1em; }
+.reveal li { margin: 0.18em 0; }
+.reveal strong { color: var(--mcazul); }
+.reveal .katex { font-size: 1.05em; }
+
+/* Título do slide: barra azul como no beamer */
+.reveal h2.ft {
+  margin: -20px -40px 22px -40px;
+  padding: 14px 40px;
+  background: var(--mcazul);
+  color: #fff;
+  font-size: 1.15em;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  text-align: left;
+}
+.reveal section { padding: 20px 40px; box-sizing: border-box; }
+
+/* Página de título */
+.reveal section.titulo { text-align: center; display: flex !important; flex-direction: column; justify-content: center; }
+.reveal section.titulo .tema { color: var(--mccinza); font-size: 0.95em; margin-bottom: 0.3em; }
+.reveal section.titulo h1 { color: var(--mcazul); font-size: 2em; text-transform: none; font-weight: 700; margin: 0 0 0.6em; }
+.reveal section.titulo .autor { font-size: 1em; margin: 0.15em; }
+.reveal section.titulo .inst { color: var(--mccinza); }
+
+/* Divisória de secção */
+.reveal section.seccao { display: flex !important; flex-direction: column; justify-content: center; }
+.reveal section.seccao h1 { color: var(--mcazul); text-transform: none; font-size: 1.8em; border-left: 10px solid var(--mcazul); padding-left: 0.5em; }
+.reveal section.seccao p { color: var(--mccinza); padding-left: 1.3em; }
+
+/* Blocos (cores automáticas como no preâmbulo) */
+.bloco { border-radius: 6px; overflow: hidden; margin: 0 0 16px; box-shadow: 0 1px 3px rgba(0,0,0,.12); --c: var(--mcazul); background: color-mix(in srgb, var(--c) 6%, white); }
+.bloco > .bt { background: var(--c); color: #fff; padding: 5px 14px; font-weight: 600; font-size: 0.9em; }
+.bloco > .bc { padding: 10px 16px; }
+.bloco > .bc > :first-child { margin-top: 0; }
+.bloco > .bc > :last-child { margin-bottom: 0; }
+.bloco.exemplo { --c: var(--mcverde); }
+.bloco.exercicio { --c: var(--mclaranja); }
+.bloco.obs { --c: var(--mccinza); }
+.bloco.ideia { --c: var(--mcroxo); }
+.bloco.teal { --c: var(--mcteal); }
+
+.red { color: var(--vermelho); }
+.blue { color: var(--mcazul); }
+.green { color: var(--mcverde); }
+.orange { color: var(--mclaranja); }
+.purple { color: var(--mcroxo); }
+.muted { color: var(--mccinza); }
+.small { font-size: 0.8em; }
+.tiny { font-size: 0.65em; }
+.center { text-align: center; }
+.caixa { display: inline-block; border: 2px solid var(--vermelho); padding: 2px 10px; border-radius: 4px; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+.cols.c64 { grid-template-columns: 1.5fr 1fr; }
+.cols.c46 { grid-template-columns: 1fr 1.5fr; }
+
+/* Fragmentos sem salto */
+.reveal .fragment.fade-in-then-semi-out.visible:not(.current-fragment) { opacity: 0.55; }
+
+/* ---------- Widgets interativos ---------- */
+.widget { background: #f7f9fc; border: 1px solid #d6dde8; border-radius: 8px; padding: 10px; }
+.widget canvas { display: block; width: auto; height: auto; max-width: 100%; max-height: 430px; margin: 0 auto; border-radius: 4px; background: #fff; touch-action: none; }
+.widget .ctrl { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-top: 8px; font-size: 0.62em; }
+.widget .ctrl label { display: inline-flex; align-items: center; gap: 4px; }
+.widget input[type=range] { width: 110px; accent-color: var(--mcazul); }
+.widget input[type=number] { width: 4.2em; font: inherit; padding: 2px 4px; border: 1px solid #bbb; border-radius: 4px; }
+.btn {
+  font: inherit; font-size: 1em; padding: 4px 10px; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--mcazul); color: var(--mcazul); background: #fff;
+}
+.btn:hover { background: color-mix(in srgb, var(--mcazul) 10%, white); }
+.btn.on, .btn.primario { background: var(--mcazul); color: #fff; }
+.widget .info { font-size: 0.62em; margin-top: 6px; min-height: 1.4em; }
+.mat-edit { display: inline-grid; grid-template-columns: repeat(var(--n, 2), auto); gap: 3px; padding: 2px 6px; border-left: 2px solid #333; border-right: 2px solid #333; border-radius: 3px; vertical-align: middle; }
+.mat-edit input { width: 3.2em !important; text-align: center; }
+
+/* Flashcards */
+.flashcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.flash { perspective: 900px; height: 170px; cursor: pointer; }
+.flash .in { position: relative; width: 100%; height: 100%; transition: transform .55s; transform-style: preserve-3d; }
+.flash.virado .in { transform: rotateY(180deg); }
+.flash .f, .flash .v {
+  position: absolute; inset: 0; backface-visibility: hidden; border-radius: 10px; padding: 12px 14px;
+  display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.76em; box-sizing: border-box;
+}
+.flash .f { background: var(--mcazul); color: #fff; font-weight: 600; }
+.flash .v { background: #eef4f2; border: 2px solid var(--mcverde); transform: rotateY(180deg); }
+
+/* Perguntas rápidas (escolha múltipla) */
+.quiz .q { font-weight: 600; margin-bottom: 10px; }
+.quiz .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quiz .opt { border: 2px solid #c9d2df; border-radius: 8px; padding: 8px 12px; cursor: pointer; background: #fff; font-size: 0.85em; transition: background .2s, border-color .2s; }
+.quiz .opt:hover { border-color: var(--mcazul); }
+.quiz .opt.certo { background: #e3f3ee; border-color: var(--mcverde); }
+.quiz .opt.errado { background: #fbe8e8; border-color: var(--vermelho); }
+.quiz .fb { margin-top: 10px; font-size: 0.75em; min-height: 1.5em; }
+
+/* Revelar ao clicar */
+.revelar { cursor: pointer; border-bottom: 2px dashed var(--mclaranja); color: transparent; background: #fff3e6; border-radius: 3px; padding: 0 6px; user-select: none; }
+.revelar .katex { visibility: hidden; }
+.revelar.visto { color: inherit; background: transparent; border-bottom-color: transparent; }
+.revelar.visto .katex { visibility: visible; }
+
+table.tab { border-collapse: collapse; font-size: 0.8em; margin: 0 auto; }
+table.tab td, table.tab th { border: 1px solid #999; padding: 4px 14px; text-align: center; }
+table.tab th { background: color-mix(in srgb, var(--mcazul) 10%, white); }
+
+/* Diagrama V -> W */
+svg.diag text { font-family: inherit; }

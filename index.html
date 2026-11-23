@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Materiais de Álgebra Linear</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --azul:#003e74; --verde:#007660; --cinza:#5a5a5a; --fundo:#f5f7fa; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Source Sans 3", Arial, sans-serif; background:var(--fundo); color:#1b1b1b; }
+  header { background:var(--azul); color:#fff; padding:28px 16px; }
+  header div, main { max-width:900px; margin:0 auto; }
+  h1 { margin:0; font-size:1.8em; } header p { margin:6px 0 0; opacity:.85; }
+  main { padding:24px 16px 48px; }
+  h2 { color:var(--azul); font-size:1.2em; margin:28px 0 12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  a.card { display:block; background:#fff; border-radius:10px; padding:16px 18px; text-decoration:none; color:inherit;
+           border:1px solid #dde3ec; border-left:6px solid var(--azul); transition:transform .15s, box-shadow .15s; }
+  a.card:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,0,0,.08); }
+  a.card b { display:block; color:var(--azul); font-size:1.05em; margin-bottom:4px; }
+  a.card span { color:var(--cinza); font-size:.92em; }
+  .card.breve { opacity:.55; pointer-events:none; border-left-color:#999; }
+  footer { text-align:center; color:var(--cinza); font-size:.85em; padding:20px; }
+</style>
+</head>
+<body>
+<header><div>
+  <h1>Álgebra Linear — materiais interativos</h1>
+  <p>João Rijo · Iscte Sintra</p>
+</div></header>
+<main>
+  <h2>Slides</h2>
+  <div class="grid">
+    <a class="card" href="slides/6-valores-vetores-proprios/">
+      <b>Tema 6 — Valores e Vetores Próprios</b>
+      <span>Revisão de transformações lineares, valores e vetores próprios, diagonalização. Animações 2D e 3D, flashcards e perguntas rápidas.</span>
+    </a>
+  </div>
+  <h2>Aplicações</h2>
+  <div class="grid">
+    <a class="card breve" href="#">
+      <b>Eliminação de Gauss</b>
+      <span>Em breve.</span>
+    </a>
+  </div>
+</main>
+<footer>Usa as setas do teclado para navegar nos slides · <kbd>F</kbd> ecrã inteiro · <kbd>Esc</kbd> vista geral</footer>
+</body>
+</html>
