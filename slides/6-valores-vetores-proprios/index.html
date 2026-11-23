@@ -57,22 +57,25 @@
   <h2 class="ft">Operações algébricas e composição</h2>
   <div class="cols">
     <div>
+      <div class="bloco obs"><div class="bt">Notação</div><div class="bc small">
+        Usando as bases canónicas, representamos a matriz de \(T\) também por \(T\).
+      </div></div>
       <div class="bloco"><div class="bt">Soma e produto por escalar</div><div class="bc small">
-        <p>Sejam \(T,S\colon V\to W\) lineares e \(\alpha\in\R\). Então \(T+S\) e \(\alpha T\) são lineares e</p>
-        <p class="center">\((T+S)_{CB}=T_{CB}+S_{CB}, \qquad (\alpha T)_{CB}=\alpha\,T_{CB}\)</p>
+        <p>Sejam \(T,S\colon V\to W\) lineares e \(\alpha\in\R\). Então \(T+S\) e \(\alpha T\) são lineares e as suas matrizes são</p>
+        <p class="center">\(T+S \qquad\text{e}\qquad \alpha\, T\)</p>
       </div></div>
       <div class="bloco"><div class="bt">Composição</div><div class="bc small">
-        <p>Sejam \(T\colon V\to U\) e \(S\colon U\to W\) lineares. A composição \((S\circ T)(v)=S(T(v))\) é linear e</p>
-        <p class="center">\((S\circ T)_{DB}=S_{DC}\,T_{CB}\)</p>
-        <p>A matriz da composição é o <strong>produto</strong> das matrizes.</p>
+        <p>Sejam \(T\colon V\to U\) e \(S\colon U\to W\) lineares. A composição \((S\circ T)(v)=S(T(v))\) é linear e a sua matriz é o <strong>produto</strong></p>
+        <p class="center">\(S\circ T = S\,T\)</p>
       </div></div>
     </div>
     <div>
       <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc small">
         <p>\(T(x,y)=(x+y,\,x-y)\) e \(S(x,y)=(2x,\,3y)\).</p>
-        <p class="center">\(A_T=\begin{bmatrix}1&1\\1&-1\end{bmatrix},\quad A_S=\begin{bmatrix}2&0\\0&3\end{bmatrix}\)</p>
-        <p class="fragment">Matriz de \(S\circ T\): <span class="revelar">\(A_SA_T=\begin{bmatrix}2&2\\3&-3\end{bmatrix}\)</span></p>
-        <p class="fragment">Matriz de \(T\circ S\): <span class="revelar">\(A_TA_S=\begin{bmatrix}2&3\\2&-3\end{bmatrix}\)</span></p>
+        <p class="center">\(T=\begin{bmatrix}1&1\\1&-1\end{bmatrix},\quad S=\begin{bmatrix}2&0\\0&3\end{bmatrix}\)</p>
+        <p class="fragment">Matriz de \(2T-S\): <span class="revelar">\(2T-S=\begin{bmatrix}0&2\\2&-5\end{bmatrix}\)</span></p>
+        <p class="fragment">Matriz de \(S\circ T\): <span class="revelar">\(S\,T=\begin{bmatrix}2&2\\3&-3\end{bmatrix}\)</span></p>
+        <p class="fragment">Matriz de \(T\circ S\): <span class="revelar">\(T\,S=\begin{bmatrix}2&3\\2&-3\end{bmatrix}\)</span></p>
         <p class="fragment">Em geral \(S\circ T\neq T\circ S\)!</p>
       </div></div>
       <p class="tiny muted">Clica nas caixas laranja para revelar a resposta.</p>
@@ -94,9 +97,6 @@
           <li><strong>Nulidade:</strong> \(\nul(T)=\dim\mathcal{N}(T)\)</li>
           <li><strong>Característica:</strong> \(\car(T)=\dim\imagem(T)\)</li>
         </ul>
-      </div></div>
-      <div class="bloco obs fragment"><div class="bt">Observação</div><div class="bc small">
-        Se \(T(x)=Ax\), então \(\mathcal{N}(T)=\mathcal{N}(A)\) e \(\imagem(T)=\col(A)\).
       </div></div>
     </div>
     <svg class="diag" viewBox="0 0 420 300" style="width:100%">
@@ -128,12 +128,12 @@
   </div></div>
   <div class="bloco exercicio"><div class="bt">Exercício — completa a tabela (clica para verificar)</div><div class="bc">
     <table class="tab">
-      <tr><th></th><th>\(\dim(V)\)</th><th>\(\car(T)\)</th><th>\(\nul(T)\)</th></tr>
-      <tr><td>\(T\colon\R^6\to\R^3\)</td><td>\(6\)</td><td>\(2\)</td><td><span class="revelar">\(4\)</span></td></tr>
-      <tr><td>\(T\colon M_{3\times3}\to P_4\)</td><td><span class="revelar">\(9\)</span></td><td><span class="revelar">\(4\)</span></td><td>\(5\)</td></tr>
-      <tr><td>\(T\colon\R^8\to P_3\)</td><td><span class="revelar">\(8\)</span></td><td>\(4\)</td><td><span class="revelar">\(4\)</span></td></tr>
-      <tr><td>\(T\colon P_9\to M_{2\times4}\)</td><td><span class="revelar">\(10\)</span></td><td><span class="revelar">\(4\)</span></td><td>\(6\)</td></tr>
-      <tr><td>\(T\colon M_{4\times4}\to M_{3\times5}\)</td><td><span class="revelar">\(16\)</span></td><td>\(11\)</td><td><span class="revelar">\(5\)</span></td></tr>
+      <tr><th></th><th>\(\dim(V)\)</th><th>\(\nul(T)\)</th><th>\(\car(T)\)</th></tr>
+      <tr><td>\(T\colon\R^6\to\R^3\)</td><td>\(6\)</td><td><span class="revelar">\(4\)</span></td><td>\(2\)</td></tr>
+      <tr><td>\(T\colon M_{3\times3}\to P_4\)</td><td><span class="revelar">\(9\)</span></td><td>\(5\)</td><td><span class="revelar">\(4\)</span></td></tr>
+      <tr><td>\(T\colon\R^8\to P_3\)</td><td><span class="revelar">\(8\)</span></td><td><span class="revelar">\(4\)</span></td><td>\(4\)</td></tr>
+      <tr><td>\(T\colon P_9\to M_{2\times4}\)</td><td><span class="revelar">\(10\)</span></td><td>\(6\)</td><td><span class="revelar">\(4\)</span></td></tr>
+      <tr><td>\(T\colon M_{4\times4}\to M_{3\times5}\)</td><td><span class="revelar">\(16\)</span></td><td><span class="revelar">\(5\)</span></td><td>\(11\)</td></tr>
     </table>
   </div></div>
 </section>
@@ -169,15 +169,18 @@
   <h2 class="ft">Invertibilidade — exemplo</h2>
   <div class="bloco exemplo"><div class="bt">Exemplo</div><div class="bc">
     <p>\(T\colon\R^2\to\R^2\), \(T(x,y)=(x+y,\,x-y)\). \(T\) é invertível? Se sim, qual é \(T^{-1}\)?</p>
+    <p class="fragment">\(T(x,y)=\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=A\begin{bmatrix}x\\y\end{bmatrix}\). Invertemos \(A\) pelo método de Gauss-Jordan:</p>
+    <p class="fragment center" style="font-size:0.86em;margin:0.4em -10px">\(\def\arraystretch{1.45}\left[\begin{array}{cc|cc}1&1&1&0\\1&-1&0&1\end{array}\right]
+      \xrightarrow{\ell_2-\ell_1}\left[\begin{array}{cc|cc}1&1&1&0\\0&-2&-1&1\end{array}\right]
+      \xrightarrow{-\frac12\ell_2}\left[\begin{array}{cc|cc}1&1&1&0\\0&1&\frac12&-\frac12\end{array}\right]
+      \xrightarrow{\ell_1-\ell_2}\left[\begin{array}{cc|cc}1&0&\frac12&\frac12\\0&1&\frac12&-\frac12\end{array}\right]\)</p>
     <div class="cols">
       <div>
-        <p class="fragment">\(T(x,y)=\underbrace{\begin{bmatrix}1&1\\1&-1\end{bmatrix}}_{A}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
-        <p class="fragment small">\(\left[\begin{array}{cc|cc}1&1&1&0\\1&-1&0&1\end{array}\right]\to\cdots\to\left[\begin{array}{cc|cc}1&0&\frac12&\frac12\\0&1&\frac12&-\frac12\end{array}\right]\)</p>
+        <p class="fragment">\(A\) é invertível, logo \(T\) é invertível e</p>
+        <p class="fragment">\(T^{-1}(x,y)=A^{-1}\begin{bmatrix}x\\y\end{bmatrix}={\def\arraystretch{1.5}\begin{bmatrix}\frac12&\frac12\\\frac12&-\frac12\end{bmatrix}}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
       </div>
       <div>
-        <p class="fragment">\(A\) é invertível, logo \(T\) é invertível e</p>
-        <p class="fragment">\(T^{-1}(x,y)=A^{-1}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}\frac12&\frac12\\[4pt]\frac12&-\frac12\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}\)</p>
-        <p class="fragment center">\(T^{-1}(x,y)=\left(\dfrac{x}{2}+\dfrac{y}{2},\ \dfrac{x}{2}-\dfrac{y}{2}\right)\)</p>
+        <p class="fragment center" style="margin-top:1.6em">\(T^{-1}(x,y)=\left(\dfrac{x}{2}+\dfrac{y}{2},\ \dfrac{x}{2}-\dfrac{y}{2}\right)\)</p>
       </div>
     </div>
   </div></div>
@@ -293,27 +296,11 @@
     <div class="bloco exemplo fragment"><div class="bt">\(v\)</div><div class="bc small">\(Av=(2,2)=2v\): vetor próprio associado a \(\lambda=2\)</div></div>
     <div class="bloco exemplo fragment"><div class="bt">\(w\)</div><div class="bc small">\(Aw=(-6,9)=-3w\): vetor próprio associado a \(\lambda=-3\)</div></div>
   </div>
-  <p class="small fragment">Pergunta seguinte do exame: determinar os valores próprios de \(T\). Como \(A\) é \(2\times2\) e já encontrámos \(\lambda=2\) e \(\lambda=-3\), não há mais nenhum!</p>
 </section>
 
 <section>
-  <h2 class="ft">Como determinar valores e vetores próprios?</h2>
-  <p>Seja \(A\) a matriz \(n\times n\) que representa \(T\). O método tem <strong>dois passos</strong>:</p>
-  <div class="bloco" style="margin-top:14px"><div class="bt">1.º passo — determinar os valores próprios</div><div class="bc small">
-    Calcular o polinómio característico \(\det(A-\lambda I)\) e resolver a equação característica
-    \[\det(A-\lambda I)=0\]
-    As soluções \(\lambda_1,\dots,\lambda_k\) são os valores próprios.
-  </div></div>
-  <div class="bloco fragment"><div class="bt">2.º passo — determinar os vetores próprios</div><div class="bc small">
-    Para <strong>cada</strong> valor próprio \(\lambda_i\), resolver o sistema homogéneo \((A-\lambda_i I)v=0\) por eliminação de Gauss:
-    \[E(\lambda_i)=\mathcal{N}(A-\lambda_i I)\]
-    Os vetores próprios associados a \(\lambda_i\) são os vetores não nulos de \(E(\lambda_i)\).
-  </div></div>
-</section>
-
-<section>
-  <h2 class="ft">1.º passo — determinar os valores próprios</h2>
-  <p>Seja \(\lambda\) um valor próprio e \(v\) um vetor próprio associado a \(\lambda\):</p>
+  <h2 class="ft">Como determinar os valores próprios?</h2>
+  <p>Seja \(\lambda\) um valor próprio de \(T\) e \(v\neq0\) um vetor próprio associado a \(\lambda\):</p>
   <div class="center" style="font-size:1.05em;line-height:2.1">
     <span class="fragment">\(T(v)=\lambda v\)</span>
     <span class="fragment">\(\ \Leftrightarrow\ T(v)-\lambda I(v)=0\)</span>
@@ -321,12 +308,30 @@
     <span class="fragment">\(\ \Leftrightarrow\ \mathcal{N}(T-\lambda I)\neq\{0\}\)</span>
     <span class="fragment">\(\ \Leftrightarrow\ \) <span class="caixa">\(\det(T-\lambda I)=0\)</span></span>
   </div>
-  <div class="bloco fragment" style="margin-top:20px"><div class="bt">Polinómio e equação característica</div><div class="bc">
+  <div class="bloco fragment" style="margin-top:18px"><div class="bt">Definição</div><div class="bc small">
+    <p>Seja \(T\) uma matriz \(n\times n\) (ou a matriz de uma transformação linear \(T\colon\R^n\to\R^n\)).</p>
     <ul>
-      <li>\(p(\lambda)=\det(A-\lambda I)\) é o <strong>polinómio característico</strong> (de grau \(n\) se \(A\) é \(n\times n\))</li>
-      <li>\(\det(A-\lambda I)=0\) é a <strong>equação característica</strong></li>
-      <li>Os <strong>valores próprios</strong> são as soluções da equação característica</li>
+      <li>\(p(\lambda)=\det(T-\lambda I)\) é um polinómio de grau \(n\) em \(\lambda\), chamado <strong>polinómio característico</strong> de \(T\)</li>
+      <li>\(\det(T-\lambda I)=0\) chama-se <strong>equação característica</strong> de \(T\)</li>
     </ul>
+  </div></div>
+  <div class="bloco obs fragment"><div class="bt">Conclusão</div><div class="bc small">
+    Os valores próprios de \(T\) são exatamente as soluções da equação característica.
+  </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Método: dois passos</h2>
+  <p>Juntando tudo, o método tem <strong>dois passos</strong>:</p>
+  <div class="bloco" style="margin-top:14px"><div class="bt">1.º passo — determinar os valores próprios</div><div class="bc small">
+    Calcular o polinómio característico \(\det(T-\lambda I)\) e resolver a equação característica
+    \[\det(T-\lambda I)=0\]
+    As soluções \(\lambda_1,\dots,\lambda_k\) são os valores próprios.
+  </div></div>
+  <div class="bloco fragment"><div class="bt">2.º passo — determinar os vetores próprios</div><div class="bc small">
+    Para <strong>cada</strong> valor próprio \(\lambda_i\), resolver o sistema homogéneo \((T-\lambda_i I)v=0\) por eliminação de Gauss:
+    \[E(\lambda_i)=\mathcal{N}(T-\lambda_i I)\]
+    Os vetores próprios associados a \(\lambda_i\) são os vetores não nulos de \(E(\lambda_i)\).
   </div></div>
 </section>
 
@@ -352,17 +357,17 @@
   <h2 class="ft">2.º passo — determinar os vetores próprios</h2>
   <p>Para cada valor próprio \(\lambda\) encontrado no 1.º passo:</p>
   <ol>
-    <li class="fragment">Calcular a matriz \(A-\lambda I\) (subtrair \(\lambda\) à diagonal de \(A\))</li>
-    <li class="fragment">Resolver \((A-\lambda I)v=0\) pelo método de eliminação de Gauss</li>
+    <li class="fragment">Calcular a matriz \(T-\lambda I\) (subtrair \(\lambda\) à diagonal de \(T\))</li>
+    <li class="fragment">Resolver \((T-\lambda I)v=0\) pelo método de eliminação de Gauss</li>
     <li class="fragment">Escrever a solução em função das variáveis livres: os vetores que aparecem formam uma <strong>base</strong> de \(E(\lambda)\)</li>
     <li class="fragment">\(m_g(\lambda)=\dim E(\lambda)=\) número de variáveis livres</li>
   </ol>
   <div class="bloco obs fragment" style="margin-top:20px"><div class="bt">Observação</div><div class="bc small">
-    Se \(\lambda\) é mesmo um valor próprio, o sistema \((A-\lambda I)v=0\) é sempre <strong>possível e indeterminado</strong> (há pelo menos uma variável livre).
+    Se \(\lambda\) é mesmo um valor próprio, o sistema \((T-\lambda I)v=0\) é sempre <strong>possível e indeterminado</strong> (há pelo menos uma variável livre).
     Se só obtivermos a solução \(v=0\), houve um erro no 1.º passo!
   </div></div>
   <div class="bloco obs fragment"><div class="bt">Verificação</div><div class="bc small">
-    No fim, confirma que \(Av=\lambda v\) para os vetores encontrados.
+    No fim, confirma que \(Tv=\lambda v\) para os vetores encontrados.
   </div></div>
 </section>
 
@@ -547,32 +552,6 @@
 </section>
 
 <section>
-  <h2 class="ft">Exercícios de exames anteriores</h2>
-  <div class="cols" style="gap:16px">
-    <div>
-      <div class="bloco exercicio"><div class="bt">Exame 2024/25</div><div class="bc small">
-        \(T(x,y)=(x+y,\,x+y)\). Calcule \(T(1,1)\) e \(T(1,-1)\), justifique que são vetores próprios e indique a matriz de \(T\) na base \(\{(1,1),(1,-1)\}\).
-        <p class="center" style="margin:6px 0 0"><span class="revelar">\(T(1,1)=2(1,1),\ T(1,-1)=0\cdot(1,-1)\ \Rightarrow\ \begin{bmatrix}2&0\\0&0\end{bmatrix}\)</span></p>
-      </div></div>
-      <div class="bloco exercicio"><div class="bt">Exame 2023/24</div><div class="bc small">
-        \(T(x,y)=(2x-y,\,y)\). Determine os valores próprios, os espaços próprios e uma base de vetores próprios.
-        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\lambda=2,\ E(2)=\ger\{(1,0)\};\ \ \lambda=1,\ E(1)=\ger\{(1,1)\}\)</span></p>
-      </div></div>
-    </div>
-    <div>
-      <div class="bloco exercicio"><div class="bt">Exame 2022/23</div><div class="bc small">
-        \(T(x,y,z)=(x+y,\,y+z,\,z+x)\). Verifique se \((1,1,1)\) é vetor próprio, encontre todos os valores próprios e diga se \(T\) é diagonalizável.
-        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\det(A-\lambda I)=(1-\lambda)^3+1=-(\lambda-2)(\lambda^2-\lambda+1)\): só \(\lambda=2\) é real, \(E(2)=\ger\{(1,1,1)\}\). Não é diagonalizável.</span></p>
-      </div></div>
-      <div class="bloco exercicio"><div class="bt">Ficha — valores e vetores próprios</div><div class="bc small">
-        \(A\) é \(6\times6\) com polinómio característico \(\lambda^2(\lambda-1)(\lambda-2)^3\). Quais os valores próprios e as possíveis dimensões dos espaços próprios?
-        <p class="center" style="margin:6px 0 0"><span class="revelar">\(m_a(0)=2,\ m_a(1)=1,\ m_a(2)=3\);&nbsp; \(\dim E(0)\in\{1,2\},\ \dim E(1)=1,\ \dim E(2)\in\{1,2,3\}\)</span></p>
-      </div></div>
-    </div>
-  </div>
-</section>
-
-<section>
   <h2 class="ft">Flashcards</h2>
   <p class="tiny muted">Clica num cartão para o virar.</p>
   <div class="flashcards">
@@ -600,6 +579,32 @@
     Se todas as raízes são reais e \(m_g(\lambda)=m_a(\lambda)\) para todo o \(\lambda\), juntar as bases dos espaços próprios: são as colunas de \(P\), e \(A=PDP^{-1}\).
     Caso contrário, \(A\) não é diagonalizável.
   </div></div>
+</section>
+
+<section>
+  <h2 class="ft">Exercícios de exames anteriores</h2>
+  <div class="cols" style="gap:16px">
+    <div>
+      <div class="bloco exercicio"><div class="bt">Exame 2024/25</div><div class="bc small">
+        \(T(x,y)=(x+y,\,x+y)\). Calcule \(T(1,1)\) e \(T(1,-1)\), justifique que são vetores próprios e indique a matriz de \(T\) na base \(\{(1,1),(1,-1)\}\).
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(T(1,1)=2(1,1),\ T(1,-1)=0\cdot(1,-1)\ \Rightarrow\ \begin{bmatrix}2&0\\0&0\end{bmatrix}\)</span></p>
+      </div></div>
+      <div class="bloco exercicio"><div class="bt">Exame 2023/24</div><div class="bc small">
+        \(T(x,y)=(2x-y,\,y)\). Determine os valores próprios, os espaços próprios e uma base de vetores próprios.
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\lambda=2,\ E(2)=\ger\{(1,0)\};\ \ \lambda=1,\ E(1)=\ger\{(1,1)\}\)</span></p>
+      </div></div>
+    </div>
+    <div>
+      <div class="bloco exercicio"><div class="bt">Exame 2022/23</div><div class="bc small">
+        \(T(x,y,z)=(x+y,\,y+z,\,z+x)\). Verifique se \((1,1,1)\) é vetor próprio, encontre todos os valores próprios e diga se \(T\) é diagonalizável.
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(\det(A-\lambda I)=(1-\lambda)^3+1=-(\lambda-2)(\lambda^2-\lambda+1)\): só \(\lambda=2\) é real, \(E(2)=\ger\{(1,1,1)\}\). Não é diagonalizável.</span></p>
+      </div></div>
+      <div class="bloco exercicio"><div class="bt">Ficha — valores e vetores próprios</div><div class="bc small">
+        \(A\) é \(6\times6\) com polinómio característico \(\lambda^2(\lambda-1)(\lambda-2)^3\). Quais os valores próprios e as possíveis dimensões dos espaços próprios?
+        <p class="center" style="margin:6px 0 0"><span class="revelar">\(m_a(0)=2,\ m_a(1)=1,\ m_a(2)=3\);&nbsp; \(\dim E(0)\in\{1,2\},\ \dim E(1)=1,\ \dim E(2)\in\{1,2,3\}\)</span></p>
+      </div></div>
+    </div>
+  </div>
 </section>
 
 </div></div>
