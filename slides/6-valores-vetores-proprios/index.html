@@ -171,9 +171,9 @@
     <p>\(T\colon\R^2\to\R^2\), \(T(x,y)=(x+y,\,x-y)\). \(T\) é invertível? Se sim, qual é \(T^{-1}\)?</p>
     <p class="fragment">\(T(x,y)=\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=A\begin{bmatrix}x\\y\end{bmatrix}\). Invertemos \(A\) pelo método de Gauss-Jordan:</p>
     <p class="fragment center" style="font-size:0.86em;margin:0.4em -10px">\(\def\arraystretch{1.45}\left[\begin{array}{cc|cc}1&1&1&0\\1&-1&0&1\end{array}\right]
-      \xrightarrow{\ell_2-\ell_1}\left[\begin{array}{cc|cc}1&1&1&0\\0&-2&-1&1\end{array}\right]
-      \xrightarrow{-\frac12\ell_2}\left[\begin{array}{cc|cc}1&1&1&0\\0&1&\frac12&-\frac12\end{array}\right]
-      \xrightarrow{\ell_1-\ell_2}\left[\begin{array}{cc|cc}1&0&\frac12&\frac12\\0&1&\frac12&-\frac12\end{array}\right]\)</p>
+      \xrightarrow{L_2-L_1}\left[\begin{array}{cc|cc}1&1&1&0\\0&-2&-1&1\end{array}\right]
+      \xrightarrow{-\frac12L_2}\left[\begin{array}{cc|cc}1&1&1&0\\0&1&\frac12&-\frac12\end{array}\right]
+      \xrightarrow{L_1-L_2}\left[\begin{array}{cc|cc}1&0&\frac12&\frac12\\0&1&\frac12&-\frac12\end{array}\right]\)</p>
     <div class="cols">
       <div>
         <p class="fragment">\(A\) é invertível, logo \(T\) é invertível e</p>
@@ -520,6 +520,11 @@
 </section>
 
 <section>
+  <h2 class="ft">Exercício: a matriz é diagonalizável?</h2>
+  <div class="exercicio-diag"></div>
+</section>
+
+<section>
   <h2 class="ft">Exemplo 3×3 — visualização</h2>
   <div class="cols" style="grid-template-columns:1.7fr 1fr">
     <div class="espaco3d" data-config='{"matriz":[2,1,1,2,3,2,3,3,4],"t":0,"raio":1,"altura":380,"distancia":7.5}'></div>
@@ -615,6 +620,7 @@
 <script src="../../assets/js/katex-config.js"></script>
 <script src="../../assets/js/plano2d.js"></script>
 <script src="../../assets/js/interativos.js"></script>
+<script src="../../assets/js/diagonalizacao.js"></script>
 <script type="module" src="../../assets/js/espaco3d.js"></script>
 <script>
   Reveal.initialize({
