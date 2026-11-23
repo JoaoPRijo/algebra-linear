@@ -235,8 +235,11 @@
         // quadrado unitário
         const q = [[0, 0], [1, 0], [1, 1], [0, 1]].map(p => this.px(this.ap(M, p)));
         c.save(); c.fillStyle = 'rgba(204,92,0,.13)'; c.beginPath(); q.forEach((p, i) => i ? c.lineTo(...p) : c.moveTo(...p)); c.closePath(); c.fill(); c.restore();
-        this.seta(this.ap(M, [1, 0]), COR.verde, 3, 'T(e₁)');
-        this.seta(this.ap(M, [0, 1]), COR.vermelho, 3, 'T(e₂)');
+        // rótulos: e₁, e₂ no início; nenhum durante a animação; T(e₁), T(e₂) no fim
+        const r1 = this.t < 0.001 ? 'e₁' : this.t > 0.999 ? 'T(e₁)' : null;
+        const r2 = this.t < 0.001 ? 'e₂' : this.t > 0.999 ? 'T(e₂)' : null;
+        this.seta(this.ap(M, [1, 0]), COR.verde, 3, r1);
+        this.seta(this.ap(M, [0, 1]), COR.vermelho, 3, r2);
       }
 
       // direções próprias
