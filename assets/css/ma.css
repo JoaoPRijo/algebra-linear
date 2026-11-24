@@ -148,6 +148,7 @@ svg.diag text { font-family: inherit; }
 .diag-ex .dx-f { padding: 3px 9px; border-radius: 12px; background: #eceff3; color: var(--mccinza); }
 .diag-ex .dx-f.atual { background: var(--mcazul); color: #fff; }
 .diag-ex .dx-f.feito { background: color-mix(in srgb, var(--mcverde) 18%, white); color: var(--mcverde); }
+.diag-ex .dx-f.saltado { text-decoration: line-through; opacity: .55; }
 .diag-ex .dx-passo { font-size: 0.72em; max-height: 520px; overflow-y: auto; padding-right: 6px; }
 .diag-ex .dx-q { margin-bottom: 8px; }
 .diag-ex .dx-opts { display: grid; gap: 8px; }

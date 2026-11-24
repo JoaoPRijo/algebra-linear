@@ -66,6 +66,7 @@
     }
     return c;
   }
+  const pmul = (a, b) => { const c = Array(a.length + b.length - 1).fill(0); a.forEach((x, i) => b.forEach((y, j) => { c[i + j] += x * y; })); return c; };
   const pval = (c, x) => c.reduce((s, a, k) => s + a * x ** k, 0);
   function ptex(c) {
     let s = '';
@@ -80,8 +81,9 @@
     return s || '0';
   }
   const fator = (r) => r === 0 ? '\\lambda' : `(\\lambda${r > 0 ? '-' : '+'}${Math.abs(r)})`;
-  function ftexFat(grupos, n) {
-    return (n % 2 ? '-' : '') + grupos.map(g => fator(g.l) + (g.m > 1 ? `^{${g.m}}` : '')).join('');
+  function ftexFat(grupos, n, quads = []) {
+    const nReais = grupos.reduce((s, g) => s + g.m, 0);
+    return (nReais % 2 ? '-' : '') + grupos.map(g => fator(g.l) + (g.m > 1 ? `^{${g.m}}` : '')).join('') + quads.map(q => `(${ptex(q)})`).join('');
   }
   const gtex = (gs) => gs.map(g => `\\lambda=${g.l}\\ (m_a=${g.m})`).join(',\\quad ');
   const gkey = (gs) => gs.map(g => g.l + ':' + g.m).join('|');
@@ -92,9 +94,54 @@
     3: { diag: [[1, 1, 1], [2, 1]], nao: [[2, 1]] },
     4: { diag: [[1, 1, 1, 1], [2, 1, 1], [2, 2]], nao: [[2, 1, 1], [3, 1], [2, 2]] }
   };
-  function gerar(n) {
-    const diag = Math.random() < 0.55;
+  /* A = P M P^{-1}, com P unimodular; devolve null se A não for "bonita" */
+  function conjugar(M, n) {
     const maxAbs = n === 4 ? 12 : 9;
+    let P = id(n), Pi = id(n);
+    for (let k = 0; k < n + (n === 2 ? 0 : 1); k++) {
+      const i = rnd(0, n - 1); let j; do { j = rnd(0, n - 1); } while (j === i);
+      const c = n === 2 ? pick([1, -1, 2, -2]) : pick([1, -1]);
+      const E = id(n); E[i][j] = c; const Ei = id(n); Ei[i][j] = -c;
+      P = mul(P, E); Pi = mul(Ei, Pi);
+    }
+    const A = mul(mul(P, M), Pi);
+    const flat = A.flat();
+    if (flat.some(x => Math.abs(x) > maxAbs)) return null;
+    if (flat.filter(x => x === 0).length > n) return null;
+    if (A.some(r => r.every(x => x === 0)) || A[0].some((_, j) => A.every(r => r[j] === 0))) return null;
+    if (A.every((r, i) => r.every((x, j) => i === j || x === 0))) return null;
+    return A;
+  }
+  function espacos(A, raizes) {
+    const gs = [...new Set(raizes)].sort((a, b) => a - b).map(l => ({ l, m: raizes.filter(x => x === l).length }));
+    gs.forEach(g => { const B = A.map((r, i) => r.map((x, j) => x - (i === j ? g.l : 0))); g.B = B; Object.assign(g, baseNucleo(B)); g.mg = g.base.length; });
+    return gs;
+  }
+  /* Matrizes com valores próprios complexos: blocos 2×2 sem raízes reais */
+  function gerarComplexo(n) {
+    for (let tent = 0; tent < 3000; tent++) {
+      const nBlocos = n === 4 && Math.random() < 0.3 ? 2 : 1;
+      const M = id(n).map(r => r.map(() => 0)), quads = [];
+      let pos = 0;
+      for (let b = 0; b < nBlocos; b++) {
+        let a, bb, c, d;
+        do { a = rnd(-2, 3); bb = rnd(-3, 3); c = rnd(-3, 3); d = rnd(-2, 3); } while (bb === 0 || c === 0 || (a - d) ** 2 + 4 * bb * c >= 0);
+        M[pos][pos] = a; M[pos][pos + 1] = bb; M[pos + 1][pos] = c; M[pos + 1][pos + 1] = d;
+        quads.push([a * d - bb * c, -(a + d), 1]); pos += 2;
+      }
+      const raizes = []; while (raizes.length < n - pos) { const l = rnd(-3, 4); if (!raizes.includes(l)) raizes.push(l); }
+      raizes.forEach((l, k) => { M[pos + k][pos + k] = l; });
+      const A = conjugar(M, n); if (!A) continue;
+      const gs = espacos(A, raizes);
+      const poly = quads.reduce((acc, q) => pmul(acc, q), polyRaizes(raizes));
+      return { n, A, gs, poly, diag: false, complexo: true, quads };
+    }
+    return null;
+  }
+  function gerar(n) {
+    const u = Math.random();
+    if (u >= 0.75) return gerarComplexo(n);
+    const diag = u < 0.45;
     for (let tent = 0; tent < 3000; tent++) {
       const padrao = pick(PADROES[n][diag ? 'diag' : 'nao']);
       const vals = []; while (vals.length < padrao.length) { const l = rnd(-3, 4); if (!vals.includes(l)) vals.push(l); }
@@ -108,26 +155,12 @@
         pos += mult;
       });
       if (!diag && !M.some((r, i) => r[i + 1] === 1)) continue;
-      // P unimodular (det 1) por operações elementares
-      let P = id(n), Pi = id(n);
-      for (let k = 0; k < n + (n === 2 ? 0 : 1); k++) {
-        const i = rnd(0, n - 1); let j; do { j = rnd(0, n - 1); } while (j === i);
-        const c = n === 2 ? pick([1, -1, 2, -2]) : pick([1, -1]);
-        const E = id(n); E[i][j] = c; const Ei = id(n); Ei[i][j] = -c;
-        P = mul(P, E); Pi = mul(Ei, Pi);
-      }
-      const A = mul(mul(P, M), Pi);
-      const flat = A.flat();
-      if (flat.some(x => Math.abs(x) > maxAbs)) continue;
-      if (flat.filter(x => x === 0).length > n) continue;
-      if (A.some(r => r.every(x => x === 0)) || A[0].some((_, j) => A.every(r => r[j] === 0))) continue; // sem linhas/colunas nulas
-      if (A.every((r, i) => r.every((x, j) => i === j || x === 0))) continue; // já diagonal
+      const A = conjugar(M, n); if (!A) continue;
       // valores próprios e espaços próprios (verificação exata)
-      const gs = [...new Set(raizes)].sort((a, b) => a - b).map(l => ({ l, m: raizes.filter(x => x === l).length }));
-      gs.forEach(g => { const B = A.map((r, i) => r.map((x, j) => x - (i === j ? g.l : 0))); g.B = B; Object.assign(g, baseNucleo(B)); g.mg = g.base.length; });
+      const gs = espacos(A, raizes);
       const ehDiag = gs.every(g => g.mg === g.m);
       if (ehDiag !== diag) continue;
-      return { n, A, gs, poly: polyRaizes(raizes), diag };
+      return { n, A, gs, poly: polyRaizes(raizes), diag, complexo: false, quads: [] };
     }
     return null;
   }
@@ -142,7 +175,27 @@
     while (ops.length < 4) { a = c.slice(); const k = rnd(0, n - 1); a[k] += pick([-2, -1, 1, 2]); tenta(a); }
     return { ops: shuffle(ops), certo };
   }
-  function opcoesVP(gs) {
+  function opcoesVP(ex) {
+    const { gs, n } = ex;
+    if (ex.complexo) {
+      const nc = n - gs.length;
+      const txtC = nc === n ? 'Não há valores próprios reais: as raízes de \\(p(\\lambda)\\) são todas complexas (não reais)'
+        : `\\(${gtex(gs)}\\) e ${nc === 2 ? 'duas raízes complexas' : 'raízes complexas'} (não reais)`;
+      const vistos = new Set(), falsos = [];
+      let t = 0;
+      while (falsos.length < 3 && t++ < 200) { // conjuntos só com raízes reais (multiplicidade total n)
+        const vals = gs.map(g => g.l);
+        while (vals.length < n) { const x = rnd(-4, 5); if (!vals.includes(x) || Math.random() < 0.3) vals.push(x); }
+        const g2 = [...new Set(vals)].sort((a, b) => a - b).map(l => ({ l, m: vals.filter(x => x === l).length }));
+        const k = gkey(g2); if (!vistos.has(k)) { vistos.add(k); falsos.push(`\\(${gtex(g2)}\\)`); }
+      }
+      const ops = shuffle([txtC, ...falsos]);
+      return { ops, iCerto: ops.indexOf(txtC) };
+    }
+    const r = opcoesVPreais(gs);
+    return { ops: r.ops.map(o => `\\(${gtex(o)}\\)`), iCerto: r.ops.findIndex(o => gkey(o) === r.certo) };
+  }
+  function opcoesVPreais(gs) {
     const certo = gkey(gs), vistos = new Set([certo]), ops = [gs];
     const tenta = (g) => { g = g.slice().sort((x, y) => x.l - y.l); const k = gkey(g); if (!vistos.has(k) && new Set(g.map(x => x.l)).size === g.length) { vistos.add(k); ops.push(g); } };
     if (gs.length > 1) tenta(gs.map((g, i) => ({ l: g.l, m: gs[(i + 1) % gs.length].m })));
@@ -171,7 +224,10 @@
 
     const FASES = ['Polinómio característico', 'Valores próprios', 'Espaços próprios', 'Conclusão'];
     function barra() {
-      $('.dx-fases').innerHTML = FASES.map((f, i) => `<span class="dx-f ${i < fase ? 'feito' : i === fase ? 'atual' : ''}">${i + 1}. ${f}</span>`).join('');
+      $('.dx-fases').innerHTML = FASES.map((f, i) => {
+        const cl = (ex && ex.complexo && i === 2 && fase > 1) ? 'saltado' : i < fase ? 'feito' : i === fase ? 'atual' : '';
+        return `<span class="dx-f ${cl}">${i + 1}. ${f}</span>`;
+      }).join('');
     }
     function atualizaResumo() { $('.dx-resumo').innerHTML = resumo.map(r => `<div>${r}</div>`).join(''); tex($('.dx-resumo')); }
 
@@ -215,11 +271,8 @@
       const AmL = A.map((r, i) => r.map((x, j) => i === j ? `${x === 0 ? '' : x}-\\lambda` : String(x)));
       if (fase === 0) {
         const { ops, certo } = opcoesPoly(poly, n);
-        const tr = A.reduce((s, r, i) => s + r[i], 0);
-        const det = poly[0];
         const ajudas = [
-          { rotulo: 'Como começar?', html: `<p>Escreve a matriz \\(A-\\lambda I\\) (subtrai \\(\\lambda\\) à diagonal):</p><p class="center">\\(A-\\lambda I=${bmat(AmL)}\\)</p><p>e calcula o seu determinante (${n === 2 ? 'fórmula dos 2×2' : n === 3 ? 'regra de Sarrus ou Laplace' : 'Laplace ao longo de uma linha ou coluna com zeros'}).</p>` },
-          { rotulo: 'Verificação rápida', html: `<p>Sem fazer as contas todas, podes eliminar opções:</p><ul><li>o termo de maior grau é \\(${n % 2 ? '-' : ''}\\lambda^{${n}}\\)</li><li>o coeficiente de \\(\\lambda^{${n - 1}}\\) é \\((-1)^{${n - 1}}\\operatorname{tr}(A)\\), com \\(\\operatorname{tr}(A)=${tr}\\)</li><li>o termo independente é \\(p(0)=\\det(A)=${det}\\)</li></ul>` }
+          { rotulo: 'Como começar?', html: `<p>Escreve a matriz \\(A-\\lambda I\\) (subtrai \\(\\lambda\\) à diagonal):</p><p class="center">\\(A-\\lambda I=${bmat(AmL)}\\)</p><p>e calcula o seu determinante (${n === 2 ? 'fórmula dos 2×2' : n === 3 ? 'regra de Sarrus ou Laplace' : 'Laplace ao longo de uma linha ou coluna com zeros'}).</p>` }
         ];
         if (n === 2) ajudas.push({ rotulo: 'Ver o cálculo', html: `<p class="center">\\(\\det(A-\\lambda I)=(${A[0][0]}-\\lambda)(${A[1][1]}-\\lambda)-(${A[0][1]})\\cdot(${A[1][0]})=${ptex(poly)}\\)</p>` });
         escolha('<b>1.º passo.</b> Qual é o polinómio característico \\(p(\\lambda)=\\det(A-\\lambda I)\\)?', ops.map(o => `\\(${o}\\)`), ops.indexOf(certo), ajudas, (box) => {
@@ -227,7 +280,8 @@
           botaoAvancar(box, 'Avançar para os valores próprios', () => { fase = 1; passo(); });
         });
       } else if (fase === 1) {
-        const { ops, certo } = opcoesVP(gs);
+        const { ops, iCerto } = opcoesVP(ex);
+        const fat = ftexFat(gs, n, ex.quads);
         // candidatos: divisores do termo independente (ou do primeiro coeficiente não nulo)
         const k0 = poly.findIndex(x => x !== 0), c0 = Math.abs(poly[k0]);
         const divs = []; for (let d = 1; d <= c0; d++) if (c0 % d === 0) divs.push(d, -d);
@@ -235,11 +289,19 @@
         const linhas = divs.slice(0, 12).map(d => `\\(p(${d})=${pval(poly, d)}\\)${pval(poly, d) === 0 ? ' ✔' : ''}`).join(' &nbsp; ');
         const ajudas = [
           { rotulo: 'Onde procurar raízes?', html: `<p>As raízes inteiras de \\(p(\\lambda)\\) são divisores do termo independente${k0 > 0 ? ` (aqui \\(\\lambda=0\\) é raiz, porque \\(p(0)=0\\))` : ''}. Testa-os:</p><p class="small">${linhas}</p><p>Quando encontrares uma raiz \\(r\\), divide \\(p(\\lambda)\\) por \\((\\lambda-r)\\) com a regra de Ruffini.</p>` },
-          { rotulo: 'Ver a fatorização', html: `<p class="center">\\(p(\\lambda)=${ftexFat(gs, n)}\\)</p><p>O expoente de cada fator \\((\\lambda-\\lambda_i)\\) é a multiplicidade algébrica \\(m_a(\\lambda_i)\\).</p>` }
+          { rotulo: 'Ver a fatorização', html: `<p class="center">\\(p(\\lambda)=${fat}\\)</p>` + (gs.length ? `<p>O expoente de cada fator \\((\\lambda-\\lambda_i)\\) é a multiplicidade algébrica \\(m_a(\\lambda_i)\\).</p>` : '') +
+            ex.quads.map(q => `<p>O fator \\(${ptex(q)}\\) tem \\(\\Delta=(${q[1]})^2-4\\cdot ${q[0]}=${q[1] * q[1] - 4 * q[0]}<0\\): as suas raízes são complexas (não reais).</p>`).join('') }
         ];
-        escolha('<b>1.º passo (cont.).</b> Quais são os valores próprios de \\(A\\) e as respetivas multiplicidades algébricas?', ops.map(o => `\\(${gtex(o)}\\)`), ops.findIndex(o => gkey(o) === certo), ajudas, (box) => {
-          resumo.push(`\\(p(\\lambda)=${ftexFat(gs, n)}\\)`, `\\(${gtex(gs)}\\)`); atualizaResumo();
-          botaoAvancar(box, 'Avançar para os espaços próprios', () => { fase = 2; iE = 0; passo(); });
+        if (ex.complexo && !gs.length) ajudas[0] = { rotulo: 'Como começar?', html: `<p>Resolve \\(p(\\lambda)=0\\)${n === 2 ? ' com a fórmula resolvente: calcula primeiro \\(\\Delta=b^2-4ac\\).' : '.'}</p>` };
+        escolha('<b>1.º passo (cont.).</b> Quais são os valores próprios de \\(A\\) e as respetivas multiplicidades algébricas?', ops, iCerto, ajudas, (box) => {
+          resumo.push(`\\(p(\\lambda)=${fat}\\)`);
+          if (ex.complexo) {
+            resumo.push((gs.length ? `\\(${gtex(gs)}\\) e ` : '') + 'raízes complexas (não reais)'); atualizaResumo();
+            botaoAvancar(box, 'Avançar para a conclusão', () => { fase = 3; passo(); });
+          } else {
+            resumo.push(`\\(${gtex(gs)}\\)`); atualizaResumo();
+            botaoAvancar(box, 'Avançar para os espaços próprios', () => { fase = 2; iE = 0; passo(); });
+          }
         }, 1);
       } else if (fase === 2) {
         const g = gs[iE];
@@ -268,6 +330,8 @@
             const P = ex.A.map((_, i) => cols.map(c => c.v[i]));
             const D = cols.map((c, i) => cols.map((_, j) => i === j ? c.l : 0));
             fb.innerHTML += ` Para todos os valores próprios, \\(m_g=m_a\\). Juntando as bases dos espaços próprios:<p class="center">\\(P=${bmat(P)},\\qquad D=${bmat(D)},\\qquad A=PDP^{-1}\\)</p>`;
+          } else if (ex.complexo) {
+            fb.innerHTML += ' O polinómio característico tem raízes complexas (não reais), por isso \\(A\\) não é diagonalizável.';
           } else {
             const mau = gs.filter(g => g.mg < g.m).map(g => `\\(m_g(${g.l})=${g.mg}<${g.m}=m_a(${g.l})\\)`).join(' e ');
             fb.innerHTML += ` Como ${mau}, não existe uma base de \\(\\R^{${n}}\\) formada por vetores próprios de \\(A\\).`;
